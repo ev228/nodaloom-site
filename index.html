@@ -55,6 +55,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:.85rem 2.5rem;displ
 .nl{font-family:var(--sf);font-size:1.45rem;font-weight:500;letter-spacing:-.01em}.nl span{color:var(--forest)}
 .nk{display:flex;align-items:center;gap:2rem}
 .nk a{font-size:.78rem;font-weight:500;color:var(--tx2);transition:color .3s}.nk a:hover{color:var(--forest)}
+.nk a.btn.bf{color:#FFFFFF !important}.nk a.btn.bf:hover{color:#FFFFFF !important}
 .btn{display:inline-flex;align-items:center;padding:.55rem 1.3rem;font-family:var(--sn);font-size:.78rem;font-weight:600;border-radius:6px;cursor:pointer;transition:all .3s var(--e);border:none}
 .bf{background:var(--forest);color:white}.bf:hover{background:var(--forest-l);transform:translateY(-1px);box-shadow:var(--sh-g)}
 .bg{background:transparent;color:var(--tx);border:1.5px solid var(--bdr)}.bg:hover{border-color:var(--forest);color:var(--forest)}
@@ -68,31 +69,61 @@ h2{font-family:var(--sf);font-weight:400;line-height:1.15;letter-spacing:-.02em}
 h2 em{font-style:italic;color:var(--forest)}
 .rv{opacity:0;transform:translateY(24px);transition:all .65s var(--e)}.rv.v{opacity:1;transform:translateY(0)}
 
-/* ═══ HERO: CHAOS ═══ */
-.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:6rem 2rem 3rem;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(240,244,241,.95) 85%);z-index:1;pointer-events:none}
+/* ═══ HERO: CHAOS + TIMELINE ═══ */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:5rem 2rem 1.5rem;overflow:hidden}
 
-.frag{position:absolute;padding:.45rem .85rem;background:var(--bg-c);border-radius:5px;font-size:.7rem;font-weight:400;letter-spacing:.01em;white-space:nowrap;box-shadow:0 2px 12px rgba(26,36,32,.04);opacity:0;z-index:0;will-change:transform;pointer-events:none}
-.frag .bar{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
-.frag.note .bar{background:var(--amber)}.frag.note{color:var(--amber)}
-.frag.ref .bar{background:var(--plum)}.frag.ref{color:var(--plum)}
-.frag.idea .bar{background:var(--forest)}.frag.idea{color:var(--forest)}
-.frag.lost .bar{background:var(--berry)}.frag.lost{color:var(--berry)}
-.frag.pdf .bar{background:var(--blue)}.frag.pdf{color:var(--blue)}
-.frag.meth .bar{background:var(--plum)}.frag.meth{color:var(--plum)}
+/* Scattered fragments — background chaos */
+.chaos-field{position:absolute;inset:0;z-index:0;pointer-events:none}
+.cf{position:absolute;padding:.35rem .65rem;background:var(--bg-c);border-radius:3px;font-size:.55rem;font-weight:400;white-space:nowrap;border-left:2.5px solid;box-shadow:0 1px 6px rgba(26,36,32,.03);line-height:1.3}
+.cf.dim{opacity:.1}.cf.mid{opacity:.18}.cf.vis{opacity:.3}
+.cf.note{border-color:var(--amber);color:var(--amber)}
+.cf.ref{border-color:var(--plum);color:var(--plum)}
+.cf.idea{border-color:var(--forest);color:var(--forest)}
+.cf.lost{border-color:var(--berry);color:var(--berry);background:#FFFAFA}
+.cf.pdf{border-color:var(--blue);color:var(--blue)}
 
-.hero-center{position:relative;z-index:2;max-width:760px;padding:2rem 0}
-.hero-center h1{font-family:var(--sf);font-size:clamp(2.8rem,6vw,4.8rem);font-weight:400;line-height:1.08;letter-spacing:-.03em;margin-bottom:1.5rem}
+.hero-center{position:relative;z-index:5;max-width:700px;padding:2rem 0}
+.hero-center h1{font-family:var(--sf);font-size:clamp(2.6rem,5.5vw,4.4rem);font-weight:400;line-height:1.08;letter-spacing:-.03em;margin-bottom:1.2rem}
 .hero-center h1 .line{display:block}
 .hero-center h1 em{font-style:italic;color:var(--berry);font-weight:500}
 .hero-center h1 .line:nth-child(1){opacity:0;animation:hl .7s var(--e) .3s forwards}
 .hero-center h1 .line:nth-child(2){opacity:0;animation:hl .7s var(--e) .55s forwards}
 .hero-center h1 .line:nth-child(3){opacity:0;animation:hl .7s var(--e) .8s forwards}
-.hero-sub{font-size:1.05rem;font-weight:300;color:var(--tx2);line-height:1.75;max-width:500px;margin:0 auto 2.5rem;opacity:0;animation:fu .7s var(--e) 1.1s forwards}
+.hero-sub{font-size:1rem;font-weight:300;color:var(--tx2);line-height:1.75;max-width:470px;margin:0 auto 2.2rem;opacity:0;animation:fu .7s var(--e) 1.1s forwards}
 .hero-cta{display:flex;gap:.8rem;justify-content:center;opacity:0;animation:fu .7s var(--e) 1.3s forwards}
-.scroll-cue{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:.3rem;opacity:0;animation:fu .7s var(--e) 2s forwards}
-.scroll-cue span{font-size:.58rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--txm)}
-.scroll-cue .sl{width:1px;height:28px;background:linear-gradient(to bottom,var(--forest),transparent);animation:sp 2s ease-in-out infinite}
+
+/* Timeline of Loss */
+.tl-section{position:relative;z-index:5;padding:1.5rem 0 0;width:100%;opacity:0;animation:fu .7s var(--e) 1.6s forwards}
+.timeline{width:100%;overflow:hidden;position:relative;padding:1rem 0}
+.timeline::before,.timeline::after{content:'';position:absolute;top:0;bottom:0;width:140px;z-index:2;pointer-events:none}
+.timeline::before{left:0;background:linear-gradient(to right,var(--bg),transparent)}
+.timeline::after{right:0;background:linear-gradient(to left,var(--bg),transparent)}
+.tl-track{display:flex;gap:.8rem;animation:tlscroll 40s linear infinite;width:max-content}
+@keyframes tlscroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tl-card{flex-shrink:0;width:230px;padding:.9rem 1rem;background:var(--bg-c);border:1px solid var(--bdr);border-radius:8px;text-align:left;position:relative;overflow:hidden;box-shadow:0 2px 8px rgba(26,36,32,.03);transition:transform .3s var(--e)}
+.tl-card:hover{transform:translateY(-2px)}
+.tl-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2.5px}
+.tl-card.lost::before{background:var(--berry)}
+.tl-card.forgot::before{background:var(--amber)}
+.tl-card.buried::before{background:var(--plum)}
+.tl-card.scattered::before{background:var(--blue)}
+.tl-type{font-size:.48rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.25rem}
+.tl-card.lost .tl-type{color:var(--berry)}
+.tl-card.forgot .tl-type{color:var(--amber)}
+.tl-card.buried .tl-type{color:var(--plum)}
+.tl-card.scattered .tl-type{color:var(--blue)}
+.tl-title{font-family:var(--sf);font-size:.78rem;color:var(--tx);line-height:1.25;margin-bottom:.2rem}
+.tl-desc{font-size:.58rem;color:var(--txm);line-height:1.45}
+.tl-when{font-size:.48rem;color:var(--txm);margin-top:.35rem;opacity:.5;font-style:italic}
+.tl-stamp{position:absolute;right:.5rem;bottom:.5rem;font-size:.45rem;font-weight:700;color:var(--berry);opacity:.12;text-transform:uppercase;transform:rotate(-12deg);letter-spacing:.05em}
+
+/* Closing question */
+.closing-q{text-align:center;padding:1.8rem 2rem .5rem;position:relative;z-index:5;opacity:0;animation:fu .7s var(--e) 2s forwards}
+.closing-q p{font-family:var(--sf);font-size:clamp(1.1rem,2.2vw,1.5rem);font-weight:400;font-style:italic;color:var(--tx2);max-width:520px;margin:0 auto;line-height:1.45}
+.closing-q p em{color:var(--berry);font-weight:500}
+.scroll-cue{display:flex;flex-direction:column;align-items:center;gap:.3rem;padding-top:1.5rem;opacity:0;animation:fu .7s var(--e) 2.3s forwards}
+.scroll-cue span{font-size:.55rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--txm)}
+.scroll-cue .sl{width:1px;height:24px;background:linear-gradient(to bottom,var(--forest),transparent);animation:sp 2s ease-in-out infinite}
 
 /* ═══ RESOLUTION ═══ */
 .resolution{padding:5rem 0 2rem;text-align:center}
@@ -289,23 +320,68 @@ footer{padding:1.6rem 2.5rem;border-top:1px solid var(--bdr);display:flex;align-
 
 <!-- ═══ HERO ═══ -->
 <section class="hero" id="top">
-  <div class="frag note cf" data-speed="0.8"><div class="bar"></div>Highlighted: "tenure insecurity limits adaptation"</div>
-  <div class="frag ref cf" data-speed="1.1"><div class="bar"></div>Blomley (2003) — need to re-read</div>
-  <div class="frag idea cf" data-speed="0.6"><div class="bar"></div>Connect spatial dimension to Harvey?</div>
-  <div class="frag lost cf" data-speed="0.9"><div class="bar"></div>Where did I save that Ostrom quote?</div>
-  <div class="frag pdf cf" data-speed="0.7"><div class="bar"></div>PDF: Dark-Sky_Governance_v3.pdf</div>
-  <div class="frag note cf" data-speed="1.2"><div class="bar"></div>Zotero note: commons theory limitations</div>
-  <div class="frag lost cf" data-speed="0.5"><div class="bar"></div>Lost insight from Tuesday's reading</div>
-  <div class="frag ref cf" data-speed="1.0"><div class="bar"></div>Check CEPAL 2022 report, p. 47</div>
-  <div class="frag idea cf" data-speed="0.8"><div class="bar"></div>Possible gap: subjective dimension</div>
-  <div class="frag pdf cf" data-speed="0.6"><div class="bar"></div>Annotated: property_regimes_review.pdf</div>
-  <div class="frag meth cf" data-speed="0.9"><div class="bar"></div>Methodological note: Q methodology?</div>
-  <div class="frag lost cf" data-speed="1.1"><div class="bar"></div>That argument about legal consciousness...</div>
+
+  <!-- Scattered fragments — visual chaos -->
+  <div class="chaos-field">
+    <div class="cf note vis" style="top:6%;left:1%;transform:rotate(-3deg)">Kerrigan (2019) — annotated: "contested legitimacy of informal tenure"</div>
+    <div class="cf lost mid" style="top:13%;left:12%;transform:rotate(1.5deg)">Where was that quote about recursive governance?</div>
+    <div class="cf ref dim" style="top:22%;left:3%;transform:rotate(-1deg)">Thornvald & Ruíz-Peña (2021), p. 134</div>
+    <div class="cf idea vis" style="top:30%;left:8%;transform:rotate(2deg)">Link watershed governance to Mehta's framework?</div>
+    <div class="cf pdf mid" style="top:40%;left:1%;transform:rotate(-2.5deg)">pastoral_mobility_ANNOTATED_v2.pdf</div>
+    <div class="cf lost dim" style="top:50%;left:10%;transform:rotate(1deg)">Lost: that fieldwork observation about fences</div>
+    <div class="cf note mid" style="top:58%;left:2%;transform:rotate(-1.8deg)">Zotero tag: "epistemological rupture"</div>
+    <div class="cf ref vis" style="top:67%;left:7%;transform:rotate(3deg)">Boamah & Amoako (2020) — re-read methodology</div>
+    <div class="cf lost dim" style="top:76%;left:1%;transform:rotate(-0.5deg)">Had an insight connecting chapters 3 and 5... gone</div>
+    <div class="cf idea mid" style="top:84%;left:14%;transform:rotate(2.2deg)">Possible gap: temporal dimension of dispossession</div>
+    <div class="cf pdf dim" style="top:92%;left:4%;transform:rotate(-3deg)">thesis_ch4_draft_v6_FINAL_REVISED.pdf</div>
+    <div class="cf ref vis" style="top:4%;right:5%;transform:rotate(2deg)">Dávalos-Fernández (2018) — challenge assumption in §2.3</div>
+    <div class="cf lost mid" style="top:11%;right:1%;transform:rotate(-1.5deg)">That argument about embodied knowledge... WHICH paper?</div>
+    <div class="cf note dim" style="top:19%;right:10%;transform:rotate(0.8deg)">Highlighted: "formalization paradox erases communal memory"</div>
+    <div class="cf pdf vis" style="top:27%;right:2%;transform:rotate(-2deg)">comparative_tenure_analysis_INCOMPLETE.pdf</div>
+    <div class="cf idea mid" style="top:36%;right:8%;transform:rotate(1.5deg)">Counter-argument: what if adaptation reinforces exclusion?</div>
+    <div class="cf lost vis" style="top:44%;right:1%;transform:rotate(-1deg)">Monday's reading session — 4 hours — no notes survived</div>
+    <div class="cf ref dim" style="top:53%;right:12%;transform:rotate(2.8deg)">Okonkwo & Nzegwu (2022), check Figure 7</div>
+    <div class="cf note mid" style="top:62%;right:3%;transform:rotate(-2.2deg)">Margin note: "contradicts my own data — rethink?"</div>
+    <div class="cf lost dim" style="top:70%;right:7%;transform:rotate(1.2deg)">Forgot why I downloaded these 12 articles</div>
+    <div class="cf pdf mid" style="top:79%;right:1%;transform:rotate(-1.8deg)">lit_review_sources_UNSORTED_batch3.pdf</div>
+    <div class="cf idea dim" style="top:87%;right:9%;transform:rotate(2.5deg)">Reframe using relational ontology? Ask supervisor</div>
+    <div class="cf lost vis" style="top:95%;right:3%;transform:rotate(-0.5deg)">Deadline: 11 days. Still no outline.</div>
+  </div>
+
+  <!-- Hero text -->
   <div class="hero-center">
     <h1><span class="line">You read. You annotate.</span><span class="line">You think.</span><span class="line">And then it all <em>slips away.</em></span></h1>
-    <p class="hero-sub">Hundreds of sources, scattered notes, brilliant insights trapped in PDFs and forgotten folders. The gap between reading and writing is where your best ideas are lost.</p>
+    <p class="hero-sub">Hundreds of sources, scattered notes, brilliant insights trapped in PDFs and forgotten Zotero folders. The gap between reading and writing is where your best ideas go to die.</p>
     <div class="hero-cta"><a href="#resolution" class="btn bf">There is a better way</a><a href="#method" class="btn bg">See the method</a></div>
   </div>
+
+  <!-- Timeline of Loss -->
+  <div class="tl-section">
+    <div class="timeline">
+      <div class="tl-track">
+        <div class="tl-card lost"><div class="tl-type">Lost insight</div><div class="tl-title">The connection between chapters 2 and 4</div><div class="tl-desc">You saw it clearly while reading at midnight. By morning, the thread was gone.</div><div class="tl-when">Tuesday, 11:47 PM</div><div class="tl-stamp">Lost</div></div>
+        <div class="tl-card forgot"><div class="tl-type">Forgotten source</div><div class="tl-title">"Governance is always a spatial practice"</div><div class="tl-desc">You highlighted it. You starred it. But which article? Which page? Which folder?</div><div class="tl-when">Somewhere last month</div><div class="tl-stamp">Lost</div></div>
+        <div class="tl-card buried"><div class="tl-type">Buried in PDFs</div><div class="tl-title">The annotation that would reframe your argument</div><div class="tl-desc">It's in one of 200+ PDFs in your Zotero library. Good luck.</div><div class="tl-when">Unknown</div><div class="tl-stamp">Lost</div></div>
+        <div class="tl-card scattered"><div class="tl-type">Scattered notes</div><div class="tl-title">Three weeks of reading. No outline.</div><div class="tl-desc">Notes in Zotero. Ideas in a notebook. Highlights in PDFs. Fragments in Google Docs. Nothing connects.</div><div class="tl-when">Every single project</div><div class="tl-stamp">Lost</div></div>
+        <div class="tl-card lost"><div class="tl-type">Lost insight</div><div class="tl-title">The 2am revelation</div><div class="tl-desc">You saw the entire argument. Crystal clear. You told yourself you'd remember. You didn't.</div><div class="tl-when">Last Thursday, 2:14 AM</div><div class="tl-stamp">Lost</div></div>
+        <div class="tl-card forgot"><div class="tl-type">Forgotten context</div><div class="tl-title">Why did I highlight this paragraph?</div><div class="tl-desc">47 passages across 12 articles. Weeks later, you can't remember why any of them mattered.</div><div class="tl-when">Ongoing</div><div class="tl-stamp">Lost</div></div>
+        <div class="tl-card buried"><div class="tl-type">Buried connection</div><div class="tl-title">The gap nobody has identified yet</div><div class="tl-desc">You spotted it across two sources. A theoretical gap that could be your contribution. But the connection exists only in your memory.</div><div class="tl-when">3 months ago</div><div class="tl-stamp">Lost</div></div>
+        <div class="tl-card scattered"><div class="tl-type">Disconnected ideas</div><div class="tl-title">Deadline in 11 days. Still no structure.</div><div class="tl-desc">You have the knowledge. You have the reading. What you don't have is a way to turn fragments into an argument.</div><div class="tl-when">Right now</div><div class="tl-stamp">Lost</div></div>
+        <!-- Duplicate for infinite scroll -->
+        <div class="tl-card lost"><div class="tl-type">Lost insight</div><div class="tl-title">The connection between chapters 2 and 4</div><div class="tl-desc">You saw it clearly while reading at midnight. By morning, the thread was gone.</div><div class="tl-when">Tuesday, 11:47 PM</div><div class="tl-stamp">Lost</div></div>
+        <div class="tl-card forgot"><div class="tl-type">Forgotten source</div><div class="tl-title">"Governance is always a spatial practice"</div><div class="tl-desc">You highlighted it. You starred it. But which article? Which page? Which folder?</div><div class="tl-when">Somewhere last month</div><div class="tl-stamp">Lost</div></div>
+        <div class="tl-card buried"><div class="tl-type">Buried in PDFs</div><div class="tl-title">The annotation that would reframe your argument</div><div class="tl-desc">It's in one of 200+ PDFs in your Zotero library. Good luck.</div><div class="tl-when">Unknown</div><div class="tl-stamp">Lost</div></div>
+        <div class="tl-card scattered"><div class="tl-type">Scattered notes</div><div class="tl-title">Three weeks of reading. No outline.</div><div class="tl-desc">Notes in Zotero. Ideas in a notebook. Highlights in PDFs. Fragments in Google Docs. Nothing connects.</div><div class="tl-when">Every single project</div><div class="tl-stamp">Lost</div></div>
+        <div class="tl-card lost"><div class="tl-type">Lost insight</div><div class="tl-title">The 2am revelation</div><div class="tl-desc">You saw the entire argument. Crystal clear. You told yourself you'd remember. You didn't.</div><div class="tl-when">Last Thursday, 2:14 AM</div><div class="tl-stamp">Lost</div></div>
+        <div class="tl-card forgot"><div class="tl-type">Forgotten context</div><div class="tl-title">Why did I highlight this paragraph?</div><div class="tl-desc">47 passages across 12 articles. Weeks later, you can't remember why any of them mattered.</div><div class="tl-when">Ongoing</div><div class="tl-stamp">Lost</div></div>
+        <div class="tl-card buried"><div class="tl-type">Buried connection</div><div class="tl-title">The gap nobody has identified yet</div><div class="tl-desc">You spotted it across two sources. A theoretical gap that could be your contribution. But the connection exists only in your memory.</div><div class="tl-when">3 months ago</div><div class="tl-stamp">Lost</div></div>
+        <div class="tl-card scattered"><div class="tl-type">Disconnected ideas</div><div class="tl-title">Deadline in 11 days. Still no structure.</div><div class="tl-desc">You have the knowledge. You have the reading. What you don't have is a way to turn fragments into an argument.</div><div class="tl-when">Right now</div><div class="tl-stamp">Lost</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Closing question -->
+  <div class="closing-q"><p>How many of <em>your</em> best ideas are trapped in a PDF you'll never open again?</p></div>
   <div class="scroll-cue"><div class="sl"></div><span>Scroll</span></div>
 </section>
 
@@ -452,35 +528,6 @@ footer{padding:1.6rem 2.5rem;border-top:1px solid var(--bdr);display:flex;align-
 const rvs=document.querySelectorAll('.rv');
 const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('v')})},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
 rvs.forEach(el=>obs.observe(el));
-
-// Fragment positioning & organic floating
-(function(){
-  const frags=document.querySelectorAll('.frag.cf');
-  const hero=document.querySelector('.hero');
-  if(!frags.length||!hero)return;
-  const positions=[
-    {x:2,y:8,r:-2.5},{x:5,y:28,r:1.2},{x:1,y:52,r:-1.8},{x:3,y:72,r:2.1},{x:8,y:88,r:-1},{x:6,y:42,r:0.8},
-    {x:78,y:12,r:1.5},{x:82,y:32,r:-2},{x:80,y:55,r:1.8},{x:85,y:75,r:-1.2},{x:78,y:92,r:0.6},{x:83,y:18,r:-0.8}
-  ];
-  frags.forEach((f,i)=>{
-    const p=positions[i%positions.length];
-    f.style.left=p.x+'%';f.style.top=p.y+'%';
-    f.style.setProperty('--r',p.r+'deg');
-    const delay=.3+i*.15;
-    f.style.animation=`floatFrag ${6+Math.random()*4}s ease-in-out infinite,fragIn .6s ${delay}s var(--e) forwards`;
-    f.style.setProperty('--mx',(Math.random()*16-8)+'px');
-    f.style.setProperty('--my',(Math.random()*14-7)+'px');
-  });
-  const style=document.createElement('style');
-  style.textContent=`@keyframes floatFrag{0%,100%{transform:translate(0,0) rotate(var(--r,0deg))}33%{transform:translate(var(--mx,5px),var(--my,-8px)) rotate(var(--r,0deg))}66%{transform:translate(calc(var(--mx,5px)*-0.6),calc(var(--my,-8px)*-0.7)) rotate(var(--r,0deg))}}@keyframes fragIn{from{opacity:0;transform:scale(.92)}to{opacity:.85;transform:scale(1)}}`;
-  document.head.appendChild(style);
-  if(window.innerWidth>768){
-    hero.addEventListener('mousemove',e=>{
-      const cx=e.clientX/window.innerWidth-.5,cy=e.clientY/window.innerHeight-.5;
-      frags.forEach((f,i)=>{const sp=parseFloat(f.dataset.speed)||.8;f.style.transform=`translate(${cx*sp*20}px,${cy*sp*15}px) rotate(${positions[i%positions.length].r}deg)`});
-    });
-  }
-})();
 </script>
 </body>
 </html>
