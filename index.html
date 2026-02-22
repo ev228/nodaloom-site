@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nodaloom — From Reading to Writing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* ═══ BOTANICAL PALETTE ═══ */
+  --bg:#F0F4F1;
+  --bg-w:#E4EBE6;
+  --bg-d:#1A2420;
+  --bg-c:#FFFFFF;
+  --tx:#1E2E24;
+  --tx2:#4A5E50;
+  --txm:#7A8A80;
+  /* Primary */
+  --forest:#2E6E4A;
+  --forest-l:#3C8A5E;
+  --forest-bg:rgba(46,110,74,0.08);
+  --forest-br:rgba(46,110,74,0.18);
+  /* Accent — berry for drama */
+  --berry:#A44A5A;
+  --berry-bg:rgba(164,74,90,0.07);
+  --berry-br:rgba(164,74,90,0.15);
+  /* Secondary */
+  --blue:#4A6EA4;
+  --blue-bg:rgba(74,110,164,0.07);
+  --amber:#B8923A;
+  --amber-bg:rgba(184,146,58,0.08);
+  --amber-br:rgba(184,146,58,0.16);
+  --plum:#6E5A82;
+  --plum-bg:rgba(110,90,130,0.07);
+  /* Utility */
+  --bdr:rgba(30,46,36,0.08);
+  --bdr-h:rgba(46,110,74,0.18);
+  --sh:0 12px 40px rgba(26,36,32,0.07);
+  --sh-g:0 6px 24px rgba(46,110,74,0.1);
+  --sf:'Playfair Display',Georgia,serif;
+  --sn:'Outfit',system-ui,sans-serif;
+  --mw:1140px;
+  --e:cubic-bezier(.25,.46,.45,.94);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:var(--sn);font-weight:400;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:var(--forest-bg);color:var(--forest)}
+a{color:inherit;text-decoration:none}
+
+/* ── Nav ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:.85rem 2.5rem;display:flex;align-items:center;justify-content:space-between;background:rgba(240,244,241,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr)}
+.nl{font-family:var(--sf);font-size:1.45rem;font-weight:500;letter-spacing:-.01em}.nl span{color:var(--forest)}
+.nk{display:flex;align-items:center;gap:2rem}
+.nk a{font-size:.78rem;font-weight:500;color:var(--tx2);transition:color .3s}.nk a:hover{color:var(--forest)}
+.btn{display:inline-flex;align-items:center;padding:.55rem 1.3rem;font-family:var(--sn);font-size:.78rem;font-weight:600;border-radius:6px;cursor:pointer;transition:all .3s var(--e);border:none}
+.bf{background:var(--forest);color:white}.bf:hover{background:var(--forest-l);transform:translateY(-1px);box-shadow:var(--sh-g)}
+.bg{background:transparent;color:var(--tx);border:1.5px solid var(--bdr)}.bg:hover{border-color:var(--forest);color:var(--forest)}
+.nb{display:none;cursor:pointer}.nb span{display:block;width:18px;height:1.5px;background:var(--tx2);margin-bottom:4px}
+
+/* ── Shared ── */
+.w{max-width:var(--mw);margin:0 auto;padding:0 2.5rem}
+.tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.66rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--forest);margin-bottom:1rem}
+.tag::before{content:'';width:16px;height:1.5px;background:currentColor}
+h2{font-family:var(--sf);font-weight:400;line-height:1.15;letter-spacing:-.02em}
+h2 em{font-style:italic;color:var(--forest)}
+.rv{opacity:0;transform:translateY(24px);transition:all .65s var(--e)}.rv.v{opacity:1;transform:translateY(0)}
+
+/* ═══ HERO: CHAOS ═══ */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:6rem 2rem 3rem;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(240,244,241,.95) 85%);z-index:1;pointer-events:none}
+
+.frag{position:absolute;padding:.45rem .85rem;background:var(--bg-c);border-radius:5px;font-size:.7rem;font-weight:400;letter-spacing:.01em;white-space:nowrap;box-shadow:0 2px 12px rgba(26,36,32,.04);opacity:0;z-index:0;will-change:transform;pointer-events:none}
+.frag .bar{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
+.frag.note .bar{background:var(--amber)}.frag.note{color:var(--amber)}
+.frag.ref .bar{background:var(--plum)}.frag.ref{color:var(--plum)}
+.frag.idea .bar{background:var(--forest)}.frag.idea{color:var(--forest)}
+.frag.lost .bar{background:var(--berry)}.frag.lost{color:var(--berry)}
+.frag.pdf .bar{background:var(--blue)}.frag.pdf{color:var(--blue)}
+.frag.meth .bar{background:var(--plum)}.frag.meth{color:var(--plum)}
+
+.hero-center{position:relative;z-index:2;max-width:760px;padding:2rem 0}
+.hero-center h1{font-family:var(--sf);font-size:clamp(2.8rem,6vw,4.8rem);font-weight:400;line-height:1.08;letter-spacing:-.03em;margin-bottom:1.5rem}
+.hero-center h1 .line{display:block}
+.hero-center h1 em{font-style:italic;color:var(--berry);font-weight:500}
+.hero-center h1 .line:nth-child(1){opacity:0;animation:hl .7s var(--e) .3s forwards}
+.hero-center h1 .line:nth-child(2){opacity:0;animation:hl .7s var(--e) .55s forwards}
+.hero-center h1 .line:nth-child(3){opacity:0;animation:hl .7s var(--e) .8s forwards}
+.hero-sub{font-size:1.05rem;font-weight:300;color:var(--tx2);line-height:1.75;max-width:500px;margin:0 auto 2.5rem;opacity:0;animation:fu .7s var(--e) 1.1s forwards}
+.hero-cta{display:flex;gap:.8rem;justify-content:center;opacity:0;animation:fu .7s var(--e) 1.3s forwards}
+.scroll-cue{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:.3rem;opacity:0;animation:fu .7s var(--e) 2s forwards}
+.scroll-cue span{font-size:.58rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--txm)}
+.scroll-cue .sl{width:1px;height:28px;background:linear-gradient(to bottom,var(--forest),transparent);animation:sp 2s ease-in-out infinite}
+
+/* ═══ RESOLUTION ═══ */
+.resolution{padding:5rem 0 2rem;text-align:center}
+.resolution h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:.7rem}
+.res-sub{font-size:.95rem;color:var(--tx2);font-weight:300;line-height:1.7;margin-bottom:3rem;max-width:480px;margin-left:auto;margin-right:auto}
+
+/* Loom Frame */
+.lf{max-width:1020px;margin:0 auto;padding:0 2.5rem}
+.lfr{background:var(--bg-c);border-radius:12px;border:1px solid var(--bdr);box-shadow:var(--sh);overflow:hidden}
+.lt{display:flex;align-items:center;gap:.5rem;padding:.65rem 1rem;background:var(--bg-w);border-bottom:1px solid var(--bdr)}
+.td{width:7px;height:7px;border-radius:50%}.td:nth-child(1){background:#FF6058}.td:nth-child(2){background:#FFBD2E}.td:nth-child(3){background:#27CA41}
+.tl2{margin-left:auto;font-size:.62rem;color:var(--txm);font-weight:500}
+.lb{display:flex}
+.ls{width:150px;flex-shrink:0;background:var(--bg-w);border-right:1px solid var(--bdr);padding:.9rem 0}
+.ls-t{font-family:var(--sf);font-size:.82rem;padding:0 .7rem;margin-bottom:.6rem;font-weight:500}
+.li{display:flex;align-items:center;gap:.4rem;padding:.32rem .7rem;font-size:.65rem;color:var(--txm)}
+.li.ac{color:var(--forest);background:var(--forest-bg);border-right:2px solid var(--forest);font-weight:500}
+.lic{width:12px;height:12px;border-radius:3px;background:var(--bdr);flex-shrink:0}
+.li.ac .lic{background:var(--forest-bg);border:1px solid var(--forest)}
+.lm{flex:1;padding:.9rem;overflow-x:auto}
+.ltb{display:flex;gap:.35rem;margin-bottom:.7rem;flex-wrap:wrap}
+.ltb-b{padding:.18rem .45rem;border-radius:3px;font-size:.55rem;font-weight:500;border:1px solid var(--bdr);color:var(--tx2);background:var(--bg-c)}
+.ltb-b.on{background:var(--berry-bg);color:var(--berry);border-color:var(--berry-br)}
+.ltb-b.g{background:var(--forest-bg);color:var(--forest);border-color:var(--forest-br)}
+.ltb-b.p{background:var(--plum-bg);color:var(--plum);border-color:rgba(110,90,130,.15)}
+.ltb-b.a{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-br)}
+
+.sp{display:flex;gap:.7rem;min-height:230px}
+.ss{min-width:185px;flex-shrink:0;background:var(--bg-w);border-radius:6px;border:1px solid var(--bdr);overflow:hidden}
+.sh2{padding:.55rem .65rem;border-bottom:1px solid var(--bdr);position:relative}
+.sn2{font-family:var(--sf);font-size:1.5rem;position:absolute;right:.5rem;top:.3rem;opacity:.08;font-weight:400}
+.st2{font-size:.57rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--tx);line-height:1.22;max-width:145px}
+.sd2{font-size:.48rem;color:var(--txm);line-height:1.3;margin-top:.15rem;max-width:150px}
+.sb2{padding:.35rem;display:flex;flex-direction:column;gap:.25rem}
+.su{padding:.35rem .45rem;background:var(--bg-c);border:1px solid var(--bdr);border-radius:3px;font-size:.52rem;font-weight:500;color:var(--tx2);line-height:1.2}
+.su.cr{border-color:var(--amber-br);background:var(--amber-bg);padding-left:.75rem;position:relative}
+.su.cr::before{content:'◆';position:absolute;left:.25rem;top:50%;transform:translateY(-50%);color:var(--amber);font-size:.32rem}
+.sm2{display:flex;gap:.2rem;margin-top:.12rem}
+.sm2 span{font-size:.42rem;color:var(--forest);font-weight:500;opacity:.6}
+
+/* ═══ METHOD ═══ */
+.method{padding:6rem 0;background:var(--bg-d);color:white;position:relative;overflow:hidden}
+.method::before{content:'';position:absolute;top:-40%;left:-10%;width:120%;height:180%;background:radial-gradient(ellipse at 25% 35%,rgba(46,110,74,.06) 0%,transparent 55%);pointer-events:none}
+.mi{position:relative}
+.mhd{text-align:center;margin-bottom:3.5rem}
+.method .tag{color:var(--forest-l)}.method .tag::before{background:var(--forest-l)}
+.mhd h2{color:white;font-size:clamp(1.8rem,3.5vw,2.6rem);max-width:600px;margin:0 auto .7rem}
+.mhd h2 em{color:var(--forest-l)}
+.mh-s{color:rgba(255,255,255,.42);font-size:.92rem;max-width:460px;margin:0 auto;font-weight:300;line-height:1.7}
+
+.mf{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative}
+.mf::before{content:'';position:absolute;top:28px;left:10%;right:10%;height:1px;background:rgba(46,110,74,.18)}
+.ms{text-align:center;padding:0 .7rem;position:relative}
+.ms-i{width:56px;height:56px;margin:0 auto .8rem;border-radius:50%;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;position:relative;z-index:1;transition:all .4s var(--e)}
+.ms:hover .ms-i{background:rgba(46,110,74,.08);border-color:rgba(46,110,74,.22);transform:translateY(-3px)}
+.ms-i svg{width:20px;height:20px;stroke:var(--forest-l);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.ms-n{font-family:var(--sf);font-size:.95rem;color:white;margin-bottom:.12rem}
+.ms-l{font-size:.58rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.35rem}
+.ms-l.c1{color:var(--forest-l)}.ms-l.c2{color:#A897D4}.ms-l.c3{color:#7DB4A0}.ms-l.c4{color:#D4A87D}.ms-l.c5{color:#D47D8A}
+.ms-d{font-size:.7rem;color:rgba(255,255,255,.33);line-height:1.42;max-width:170px;margin:0 auto}
+
+/* ═══ CRYSTALLISATIONS ═══ */
+.crys{padding:7rem 0;overflow:hidden}
+.crys-g{display:grid;grid-template-columns:1fr 1.15fr;gap:3.5rem;align-items:center}
+.crys-t h2{font-size:clamp(1.8rem,3vw,2.4rem);margin-bottom:.7rem}
+.crys-d{color:var(--tx2);font-size:.9rem;line-height:1.75;margin-bottom:1.3rem;max-width:400px}
+.cflo{display:flex;flex-direction:column;gap:0}
+.cfs{display:flex;align-items:center;gap:.7rem;padding:.55rem 0}
+.cfn{width:26px;height:26px;border-radius:50%;background:var(--forest-bg);color:var(--forest);font-size:.62rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cft{font-size:.82rem;color:var(--tx2);line-height:1.45}.cft strong{color:var(--tx);font-weight:500}
+.cfc{width:26px;display:flex;justify-content:center;padding:.05rem 0}
+.cfc-l{width:1px;height:10px;background:var(--forest);opacity:.15}
+
+/* Crystal mockup */
+.cmk{background:var(--bg-c);border-radius:10px;border:1px solid var(--bdr);box-shadow:var(--sh);overflow:hidden}
+.cmk-h{padding:.55rem .9rem;background:var(--bg-w);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:.4rem}
+.cmk-h .dia{color:var(--amber);font-size:.65rem}
+.cmk-h .tit{font-size:.72rem;font-weight:600;color:var(--tx)}
+.cmk-b{padding:.8rem}
+.cmk-s{width:100%;padding:.32rem .5rem;border:1px solid var(--bdr);border-radius:4px;font-size:.58rem;color:var(--txm);background:var(--bg-w);margin-bottom:.6rem}
+.cmk-c{padding:.6rem;border:1px solid var(--bdr);border-radius:5px;margin-bottom:.4rem;background:var(--bg-c);transition:all .3s var(--e)}
+.cmk-c:hover{border-color:var(--bdr-h);box-shadow:0 1px 4px rgba(0,0,0,.03)}
+.cmk-badge{display:inline-block;padding:.08rem .35rem;font-size:.47rem;font-weight:600;border-radius:3px;margin-bottom:.2rem}
+.cmk-badge.be{background:var(--forest-bg);color:var(--forest)}
+.cmk-badge.bt{background:var(--plum-bg);color:var(--plum)}
+.cmk-badge.bm{background:var(--blue-bg);color:var(--blue)}
+.cmk-badge.bs{background:var(--berry-bg);color:var(--berry)}
+.cmk-ct{font-size:.65rem;font-weight:500;color:var(--tx);line-height:1.25;margin-bottom:.1rem}
+.cmk-cx{font-size:.52rem;color:var(--txm);line-height:1.3}
+.cmk-ca{font-size:.52rem;color:var(--forest);font-weight:500;margin-top:.2rem}
+.cmk-tr{font-size:.54rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--txm);margin-top:.7rem;margin-bottom:.35rem}
+.cmk-ti{display:flex;align-items:center;gap:.3rem;font-size:.54rem;color:var(--tx2);margin-bottom:.18rem}
+.cmk-td{width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0}
+
+/* ═══ FORGE ═══ */
+.forge{padding:7rem 0;background:var(--bg-w);overflow:hidden}
+.fg{display:grid;grid-template-columns:1fr 1.1fr;gap:3rem;align-items:center}
+.forge-t h2{font-size:clamp(1.8rem,3vw,2.3rem);margin-bottom:.7rem}
+.forge-d{color:var(--tx2);font-size:.9rem;line-height:1.75;margin-bottom:1rem;max-width:380px}
+.forge-c{padding:.7rem .9rem;background:var(--forest-bg);border-left:3px solid var(--forest);border-radius:0 5px 5px 0;font-size:.82rem;color:var(--forest);font-weight:500;line-height:1.4}
+
+.fmk{background:var(--bg-c);border-radius:10px;border:1px solid var(--bdr);box-shadow:var(--sh);overflow:hidden}
+.fmk-h{display:flex;align-items:center;padding:.55rem .9rem;background:var(--bg-w);border-bottom:1px solid var(--bdr)}
+.fmk-tabs{display:flex;gap:.25rem}
+.fmk-tab{padding:.17rem .5rem;border-radius:3px;font-size:.57rem;font-weight:500;color:var(--txm);border:1px solid var(--bdr);background:var(--bg-c)}
+.fmk-tab.on{background:var(--forest-bg);color:var(--forest);border-color:var(--forest-br)}
+.fmk-b{padding:.9rem}
+.fmk-ol{font-size:.55rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--berry);margin-bottom:.35rem}
+.fmk-ot{font-family:var(--sf);font-size:.9rem;line-height:1.2;color:var(--tx);margin-bottom:.6rem}
+.fmk-sec{padding:.4rem .55rem;margin-bottom:.2rem;background:var(--berry-bg);border-radius:3px;border-left:3px solid var(--berry)}
+.fmk-st{font-size:.58rem;font-weight:600;color:var(--tx);line-height:1.2}
+.fmk-sd{font-size:.48rem;color:var(--txm);line-height:1.25;margin-top:.08rem}
+.fmk-sub{padding:.25rem .4rem .25rem 1rem;font-size:.52rem;color:var(--tx2);line-height:1.2;margin-bottom:.08rem}
+.fmk-btn{display:flex;align-items:center;justify-content:center;gap:.25rem;padding:.4rem;background:var(--berry);color:white;border-radius:3px;font-size:.58rem;font-weight:600;margin-top:.4rem}
+.fmk-in{padding:.4rem .55rem;border-top:1px solid var(--bdr);font-size:.55rem;color:var(--txm);margin-top:.4rem}
+.fmk-ih{font-size:.45rem;color:var(--txm);opacity:.5;margin-top:.1rem}.fmk-ih strong{color:var(--tx2)}
+
+/* ═══ TRANSLATION ═══ */
+.trans{padding:7rem 0}
+.tg{display:grid;grid-template-columns:1.1fr 1fr;gap:3.5rem;align-items:center}
+.trans-t h2{font-size:clamp(1.8rem,3vw,2.3rem);margin-bottom:.7rem}
+.trans-d{color:var(--tx2);font-size:.9rem;line-height:1.75;margin-bottom:1rem}
+.tfs{display:flex;flex-direction:column;gap:.45rem}
+.tfi{display:flex;align-items:center;gap:.55rem;font-size:.82rem;color:var(--tx)}
+.tfi-c{width:20px;height:20px;border-radius:4px;flex-shrink:0;background:var(--forest-bg);display:flex;align-items:center;justify-content:center}
+.tfi-c svg{width:10px;height:10px;stroke:var(--forest);fill:none;stroke-width:2;stroke-linecap:round}
+.tmk{background:var(--bg-c);border-radius:10px;border:1px solid var(--bdr);box-shadow:var(--sh);overflow:hidden}
+.tmk-h{display:flex;align-items:center;gap:.7rem;padding:.55rem .9rem;background:var(--bg-w);border-bottom:1px solid var(--bdr)}
+.tmk-l{font-size:.62rem;font-weight:600;padding:.17rem .45rem;border-radius:3px}
+.tmk-l.s{background:var(--forest-bg);color:var(--forest)}.tmk-l.t{background:var(--plum-bg);color:var(--plum)}
+.tmk-a{color:var(--txm);font-size:.65rem}
+.tmk-bd{display:grid;grid-template-columns:1fr 1fr}
+.tmk-p{padding:.8rem}.tmk-p:first-child{border-right:1px solid var(--bdr)}
+.tln{height:4px;border-radius:2px;margin-bottom:.28rem;background:rgba(30,46,36,.04)}
+.tln.w9{width:90%}.tln.w7{width:75%}.tln.w8{width:85%}.tln.w6{width:60%}.tln.w95{width:95%}
+.tln.gg{background:rgba(46,110,74,.06)}.tln.pp{background:rgba(110,90,130,.06)}
+.tmk-f{display:flex;align-items:center;justify-content:space-between;padding:.4rem .9rem;border-top:1px solid var(--bdr);background:var(--bg-w)}
+.tmk-f span{font-size:.55rem;color:var(--txm)}.tmk-f .badge{font-size:.55rem;color:var(--forest);font-weight:500}
+
+/* ═══ CITATIONS ═══ */
+.cite{padding:3.5rem 0;text-align:center}
+.cite h2{font-size:clamp(1.3rem,2vw,1.7rem);color:var(--tx2);margin-bottom:1.5rem}.cite h2 em{color:var(--forest)}
+.ct-tags{display:flex;flex-wrap:wrap;gap:.45rem;justify-content:center}
+.ct{padding:.32rem .8rem;background:var(--bg-c);border:1px solid var(--bdr);border-radius:14px;font-size:.72rem;font-weight:500;color:var(--tx2);transition:all .3s var(--e)}
+.ct:hover,.ct.on{border-color:var(--forest);color:var(--forest);background:var(--forest-bg)}
+
+/* ═══ AUDIENCE ═══ */
+.aud{padding:5.5rem 0;background:var(--bg-d);color:white}
+.audi{text-align:center}
+.aud .tag{color:var(--forest-l)}.aud .tag::before{background:var(--forest-l)}
+.aud h2{color:white;font-size:clamp(1.8rem,3vw,2.3rem);margin-bottom:2.5rem}.aud h2 em{color:var(--forest-l)}
+.aug{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;text-align:left}
+.ac{padding:1.5rem 1.2rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:7px;transition:all .4s var(--e)}
+.ac:hover{background:rgba(255,255,255,.06);border-color:rgba(46,110,74,.22);transform:translateY(-2px)}
+.aci{width:26px;height:26px;border-radius:5px;margin-bottom:.6rem;background:rgba(46,110,74,.08);display:flex;align-items:center;justify-content:center}
+.aci svg{width:12px;height:12px;stroke:var(--forest-l);fill:none;stroke-width:1.8;stroke-linecap:round}
+.ac h3{font-family:var(--sf);font-size:.95rem;margin-bottom:.3rem}.ac p{font-size:.72rem;color:rgba(255,255,255,.35);line-height:1.5}
+
+/* ═══ INTEGRATIONS ═══ */
+.intb{padding:2rem 0;border-top:1px solid var(--bdr)}
+.inti{display:flex;align-items:center;justify-content:center;gap:2rem;flex-wrap:wrap}
+.intm{display:flex;align-items:center;gap:.35rem;font-size:.72rem;color:var(--txm);font-weight:500}
+.intc{width:24px;height:24px;border-radius:5px;background:var(--bg-w);border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:600;color:var(--tx2)}
+
+/* ═══ CTA ═══ */
+.cta{padding:6rem 0;text-align:center;position:relative}
+.cta::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:400px;height:400px;background:radial-gradient(ellipse,rgba(46,110,74,.04),transparent 70%);pointer-events:none}
+.ctai{max-width:500px;margin:0 auto;position:relative}
+.cta h2{font-size:clamp(1.8rem,3.2vw,2.4rem);margin-bottom:.6rem}.cta h2 em{color:var(--forest)}
+.cta p{color:var(--tx2);font-size:.9rem;margin-bottom:1.5rem;font-weight:300}
+.cta-b{display:flex;gap:.7rem;justify-content:center}
+
+/* ═══ FOOTER ═══ */
+footer{padding:1.6rem 2.5rem;border-top:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
+.fl{font-family:var(--sf);font-size:.9rem;color:var(--txm)}.fl span{color:var(--forest);opacity:.5}
+.fk{display:flex;gap:1.2rem}.fk a{font-size:.68rem;color:var(--txm)}.fk a:hover{color:var(--forest)}
+.fc{font-size:.6rem;color:var(--txm);opacity:.4}
+
+@keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes hl{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes sp{0%,100%{opacity:.3}50%{opacity:.8}}
+
+@media(max-width:1024px){.mf{grid-template-columns:repeat(3,1fr);gap:1.2rem 0}.mf::before{display:none}.crys-g,.fg,.tg{grid-template-columns:1fr;gap:2.5rem}.aug{grid-template-columns:1fr 1fr}.sp{overflow-x:auto}}
+@media(max-width:768px){.nk{display:none}.nb{display:block}.hero{padding:5.5rem 1.5rem 2.5rem}.hero-cta{flex-direction:column;align-items:center}.frag{font-size:.58rem;padding:.35rem .6rem}.ls{display:none}.mf{grid-template-columns:1fr 1fr}.aug{grid-template-columns:1fr}.cta-b{flex-direction:column;align-items:center}footer{flex-direction:column;gap:.8rem;text-align:center}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nl">Noda<span>loom</span></a>
+  <div class="nk"><a href="#method">Method</a><a href="#crystallisations">Crystallisations</a><a href="#forge">The Forge</a><a href="#translation">Translation</a><a href="#cta" class="btn bf">Early Access</a></div>
+  <div class="nb"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="top">
+  <div class="frag note cf" data-speed="0.8"><div class="bar"></div>Highlighted: "tenure insecurity limits adaptation"</div>
+  <div class="frag ref cf" data-speed="1.1"><div class="bar"></div>Blomley (2003) — need to re-read</div>
+  <div class="frag idea cf" data-speed="0.6"><div class="bar"></div>Connect spatial dimension to Harvey?</div>
+  <div class="frag lost cf" data-speed="0.9"><div class="bar"></div>Where did I save that Ostrom quote?</div>
+  <div class="frag pdf cf" data-speed="0.7"><div class="bar"></div>PDF: Dark-Sky_Governance_v3.pdf</div>
+  <div class="frag note cf" data-speed="1.2"><div class="bar"></div>Zotero note: commons theory limitations</div>
+  <div class="frag lost cf" data-speed="0.5"><div class="bar"></div>Lost insight from Tuesday's reading</div>
+  <div class="frag ref cf" data-speed="1.0"><div class="bar"></div>Check CEPAL 2022 report, p. 47</div>
+  <div class="frag idea cf" data-speed="0.8"><div class="bar"></div>Possible gap: subjective dimension</div>
+  <div class="frag pdf cf" data-speed="0.6"><div class="bar"></div>Annotated: property_regimes_review.pdf</div>
+  <div class="frag meth cf" data-speed="0.9"><div class="bar"></div>Methodological note: Q methodology?</div>
+  <div class="frag lost cf" data-speed="1.1"><div class="bar"></div>That argument about legal consciousness...</div>
+  <div class="hero-center">
+    <h1><span class="line">You read. You annotate.</span><span class="line">You think.</span><span class="line">And then it all <em>slips away.</em></span></h1>
+    <p class="hero-sub">Hundreds of sources, scattered notes, brilliant insights trapped in PDFs and forgotten folders. The gap between reading and writing is where your best ideas are lost.</p>
+    <div class="hero-cta"><a href="#resolution" class="btn bf">There is a better way</a><a href="#method" class="btn bg">See the method</a></div>
+  </div>
+  <div class="scroll-cue"><div class="sl"></div><span>Scroll</span></div>
+</section>
+
+<!-- ═══ RESOLUTION ═══ -->
+<section class="resolution" id="resolution">
+  <div class="rv"><h2>Nodaloom brings <em>order.</em></h2><p class="res-sub">Every insight finds its place. Every argument takes shape.</p></div>
+  <div class="lf rv">
+    <div class="lfr">
+      <div class="lt"><div class="td"></div><div class="td"></div><div class="td"></div><span class="tl2">nodaloom.com</span></div>
+      <div class="lb">
+        <div class="ls"><div class="ls-t">Nodaloom</div><div class="li"><div class="lic"></div> Dashboard</div><div class="li"><div class="lic"></div> The Forge</div><div class="li"><div class="lic"></div> The Lens</div><div class="li ac"><div class="lic"></div> The Loom</div><div class="li"><div class="lic"></div> The Archive</div><div class="li"><div class="lic"></div> The Scribe</div></div>
+        <div class="lm">
+          <div class="ltb"><div class="ltb-b on">Spine</div><div class="ltb-b">Free</div><div class="ltb-b">Reorganise</div><div class="ltb-b">Section</div><div class="ltb-b">Argument</div><div class="ltb-b">Citation</div><div class="ltb-b g">Ask Opus</div><div class="ltb-b p">Translate</div><div class="ltb-b a">Crystallisations</div></div>
+          <div class="sp">
+            <div class="ss"><div class="sh2"><div class="sn2">1</div><div class="st2">Introduction: The Paradox of Light</div><div class="sd2">Frames the central paradox of illumination as progress</div></div><div class="sb2"><div class="su">1.1 Illumination as Ideology</div><div class="su">1.2 Research Question</div><div class="su cr">Insight: Critical inversion</div><div class="sm2"><span>Suggest sources</span><span>Write in Scribe</span></div></div></div>
+            <div class="ss"><div class="sh2"><div class="sn2">2</div><div class="st2">Theoretical Framework: Commons &amp; Property</div><div class="sd2">Develops the tripartite theoretical lens</div></div><div class="sb2"><div class="su">2.1 Night Sky as Commons</div><div class="su">2.2 Negative Property Rights</div><div class="su cr">Insight: Ostrom's limits</div><div class="su">2.3 Legal Geography</div><div class="sm2"><span>Suggest sources</span><span>Write in Scribe</span></div></div></div>
+            <div class="ss"><div class="sh2"><div class="sn2">3</div><div class="st2">Normative Cartography: Regulation</div><div class="sd2">Maps the regulatory landscape at multiple levels</div></div><div class="sb2"><div class="su">3.1 Starlight Declaration</div><div class="su">3.2 National Models</div><div class="su cr">Insight: Soft-law dominance</div><div class="su">3.3 Structural Gaps</div><div class="sm2"><span>Suggest sources</span><span>Write in Scribe</span></div></div></div>
+            <div class="ss"><div class="sh2"><div class="sn2">4</div><div class="st2">Tensions: Justice &amp; Ecology</div><div class="sd2">Examines material and political conflicts</div></div><div class="sb2"><div class="su">4.1 Tourism vs. Integrity</div><div class="su">4.2 Environmental Justice</div><div class="su cr">Insight: Absent biodiversity</div><div class="sm2"><span>Suggest sources</span><span>Write in Scribe</span></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ METHOD ═══ -->
+<section class="method" id="method">
+  <div class="w mi">
+    <div class="mhd"><div class="tag rv">A method, not just a tool</div><h2 class="rv">Five modules. One <em>structured</em> workflow.</h2><p class="mh-s rv">From the first reading to the publishable article.</p></div>
+    <div class="mf rv">
+      <div class="ms"><div class="ms-i"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="ms-n">The Lens</div><div class="ms-l c1">Analyse</div><div class="ms-d">AI source analysis. Zotero import. Chat with up to 10 documents.</div></div>
+      <div class="ms"><div class="ms-i"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div><div class="ms-n">The Forge</div><div class="ms-l c2">Dialogue</div><div class="ms-d">Guided conversations that build your argument and generate outlines.</div></div>
+      <div class="ms"><div class="ms-i"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div><div class="ms-n">The Loom</div><div class="ms-l c3">Structure</div><div class="ms-d">Visual spine layout. Crystallisations auto-assigned. Your argument at a glance.</div></div>
+      <div class="ms"><div class="ms-i"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="ms-n">The Archive</div><div class="ms-l c4">Manage</div><div class="ms-d">Unified sources with Zotero integration and network graph.</div></div>
+      <div class="ms"><div class="ms-i"><svg viewBox="0 0 24 24"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div><div class="ms-n">The Scribe</div><div class="ms-l c5">Write</div><div class="ms-d">Academic writing with citations, translation, and AI editorial review.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CRYSTALLISATIONS ═══ -->
+<section class="crys" id="crystallisations">
+  <div class="w crys-g">
+    <div class="crys-t"><div class="tag rv">Core Concept</div><h2 class="rv">Your ideas deserve<br>to <em>survive.</em></h2><p class="crys-d rv">Every insight while reading — every theoretical tension, every gap, every unexpected connection — captured, classified, and placed exactly where it belongs.</p>
+      <div class="cflo rv">
+        <div class="cfs"><div class="cfn">1</div><div class="cft"><strong>Read</strong> — analyse or dialogue</div></div><div class="cfc"><div class="cfc-l"></div></div>
+        <div class="cfs"><div class="cfn">2</div><div class="cft"><strong>Identify</strong> — a finding worth preserving</div></div><div class="cfc"><div class="cfc-l"></div></div>
+        <div class="cfs"><div class="cfn">3</div><div class="cft"><strong>Crystallise</strong> — one click, classified</div></div><div class="cfc"><div class="cfc-l"></div></div>
+        <div class="cfs"><div class="cfn">4</div><div class="cft"><strong>Assign</strong> — AI places it in your Loom</div></div><div class="cfc"><div class="cfc-l"></div></div>
+        <div class="cfs"><div class="cfn">5</div><div class="cft"><strong>Write</strong> — insights at hand in The Scribe</div></div>
+      </div>
+    </div>
+    <div class="rv">
+      <div class="cmk">
+        <div class="cmk-h"><span class="dia">◆</span><span class="tit">Crystallised Insights</span></div>
+        <div class="cmk-b">
+          <div class="cmk-s">Search insights...</div>
+          <div class="cmk-c"><div class="cmk-badge be">empirical</div><div class="cmk-ct">Relational conception of space</div><div class="cmk-cx">Space as constituted by practices and human interrelations...</div><div class="cmk-ca">→ Send to Loom</div></div>
+          <div class="cmk-c"><div class="cmk-badge bt">theoretical</div><div class="cmk-ct">Commons theory and atmospheric resources</div><div class="cmk-cx">Classical commons frameworks struggle with resources lacking clear boundaries...</div><div class="cmk-ca">→ Send to Loom</div></div>
+          <div class="cmk-c"><div class="cmk-badge bm">methodological</div><div class="cmk-ct">Q methodology for subjective positions</div><div class="cmk-cx">Captures diversity of viewpoints on property relations...</div><div class="cmk-ca">→ Send to Loom</div></div>
+          <div class="cmk-c"><div class="cmk-badge bs">structural</div><div class="cmk-ct">Regulatory fragmentation across levels</div><div class="cmk-cx">Soft-law instruments dominate governance architecture...</div><div class="cmk-ca">→ Send to Loom</div></div>
+          <div class="cmk-tr">Argument Trajectory</div>
+          <div class="cmk-ti"><div class="cmk-td"></div> Relational space</div><div class="cmk-ti"><div class="cmk-td"></div> Commons theory</div><div class="cmk-ti"><div class="cmk-td"></div> Q methodology</div><div class="cmk-ti"><div class="cmk-td"></div> Regulatory gaps</div><div class="cmk-ti"><div class="cmk-td"></div> Critical inversion</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FORGE ═══ -->
+<section class="forge" id="forge">
+  <div class="w fg">
+    <div class="forge-t"><div class="tag rv">Methodological Differentiator</div><h2 class="rv">The Forge builds<br>your <em>outline.</em></h2><p class="forge-d rv">Not open-ended chat. Guided intellectual dialogue that produces a structured, buildable outline for your article.</p><div class="forge-c rv">Dialogue → Outline → Loom → Article.</div></div>
+    <div class="rv">
+      <div class="fmk">
+        <div class="fmk-h"><div class="fmk-tabs"><div class="fmk-tab on">New</div><div class="fmk-tab">Conversation 1</div><div class="fmk-tab">Conversation 2</div></div></div>
+        <div class="fmk-b">
+          <div class="fmk-ol">Article Outline</div>
+          <div class="fmk-ot">Dark Skies and the Governance of the Luminic Commons</div>
+          <div class="fmk-sec"><div class="fmk-st">1. Introduction: The Paradox of Light as Progress</div><div class="fmk-sd">Frames the central paradox of artificial illumination</div></div>
+          <div class="fmk-sub">1.1 Illumination as Ideology: A Brief Genealogy</div>
+          <div class="fmk-sub">1.2 Research Question and Positionality</div>
+          <div class="fmk-sec"><div class="fmk-st">2. Theoretical Framework: Commons, Property, and Space</div><div class="fmk-sd">Develops the tripartite theoretical lens</div></div>
+          <div class="fmk-sub">2.1 The Night Sky as Commons</div>
+          <div class="fmk-sub">2.2 Negative Property and Exclusion Rights</div>
+          <div class="fmk-sub">2.3 Legal Geography: The Night as Produced Space</div>
+          <div class="fmk-btn">Build in Loom →</div>
+          <div class="fmk-in">Share your idea, argument, or question...</div>
+          <div class="fmk-ih">Shift+Enter for new line. Type <strong>/outline</strong> to generate outline for Loom.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TRANSLATION ═══ -->
+<section class="trans" id="translation">
+  <div class="w tg">
+    <div class="rv">
+      <div class="tmk">
+        <div class="tmk-h"><div class="tmk-l s">Español</div><span class="tmk-a">→</span><div class="tmk-l t">British English</div></div>
+        <div class="tmk-bd"><div class="tmk-p"><div class="tln w9"></div><div class="tln w7"></div><div class="tln w8 gg"></div><div class="tln w6"></div><div style="height:.35rem"></div><div class="tln w95"></div><div class="tln w7"></div><div class="tln w8 gg"></div><div class="tln w9"></div></div><div class="tmk-p"><div class="tln w8 pp"></div><div class="tln w9"></div><div class="tln w7 pp"></div><div class="tln w6"></div><div style="height:.35rem"></div><div class="tln w9 pp"></div><div class="tln w8"></div><div class="tln w7 pp"></div><div class="tln w95"></div></div></div>
+        <div class="tmk-f"><span>DeepL base + Claude academic refinement</span><div class="badge">Academic register preserved</div></div>
+      </div>
+    </div>
+    <div class="trans-t"><div class="tag rv">Academic Translation</div><h2 class="rv">Research in your language.<br>Publish in <em>any other.</em></h2><p class="trans-d rv">Write in your native language. The hybrid engine produces publication-ready prose preserving register, terminology, and conventions.</p>
+      <div class="tfs rv">
+        <div class="tfi"><div class="tfi-c"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div> DeepL for high-fidelity base translation</div>
+        <div class="tfi"><div class="tfi-c"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div> Claude for academic register refinement</div>
+        <div class="tfi"><div class="tfi-c"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div> Field-specific terminology preserved</div>
+        <div class="tfi"><div class="tfi-c"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div> AI editorial review with tracked changes</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Citations -->
+<section class="cite rv"><div class="w"><h2>All major <em>citation systems</em></h2><div class="ct-tags"><div class="ct on">OSCOLA</div><div class="ct">APA 7th</div><div class="ct">Harvard</div><div class="ct">Chicago</div><div class="ct">MLA</div><div class="ct">Vancouver</div><div class="ct">IEEE</div><div class="ct">Bluebook</div></div></div></section>
+
+<!-- Audience -->
+<section class="aud">
+  <div class="w audi">
+    <div class="tag rv">Built For</div><h2 class="rv">For researchers who <em>publish.</em></h2>
+    <div class="aug rv">
+      <div class="ac"><div class="aci"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><h3>Journal Authors</h3><p>Transform months of reading into publishable arguments.</p></div>
+      <div class="ac"><div class="aci"><svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 6 3 6 3s6-1 6-3v-5"/></svg></div><h3>Doctoral Candidates</h3><p>Structure your thesis across hundreds of sources.</p></div>
+      <div class="ac"><div class="aci"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3>Research Teams</h3><p>Systematise collaborative article production.</p></div>
+      <div class="ac"><div class="aci"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h3>Multilingual Scholars</h3><p>Research in one language, publish in another.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Integrations -->
+<section class="intb"><div class="inti"><div class="intm"><div class="intc">Z</div> Zotero</div><div class="intm"><div class="intc">D</div> DeepL</div><div class="intm"><div class="intc">C</div> Claude</div><div class="intm"><div class="intc">G</div> Gemini</div></div></section>
+
+<!-- CTA -->
+<section class="cta" id="cta">
+  <div class="ctai"><h2 class="rv">Your ideas deserve better<br>than a <em>blank page.</em></h2><p class="rv">Nodaloom is in closed beta. Join researchers who refuse to lose another insight.</p><div class="cta-b rv"><a href="#" class="btn bf">Request Early Access</a><a href="#" class="btn bg">Watch Demo</a></div></div>
+</section>
+
+<footer><div class="fl">Noda<span>loom</span></div><div class="fk"><a href="#">About</a><a href="#">Privacy</a><a href="#">Contact</a></div><div class="fc">© 2025 Nodaloom</div></footer>
+
+<script>
+// Scroll reveals
+const rvs=document.querySelectorAll('.rv');
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('v')})},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
+rvs.forEach(el=>obs.observe(el));
+
+// Fragment positioning & organic floating
+(function(){
+  const frags=document.querySelectorAll('.frag.cf');
+  const hero=document.querySelector('.hero');
+  if(!frags.length||!hero)return;
+  const positions=[
+    {x:2,y:8,r:-2.5},{x:5,y:28,r:1.2},{x:1,y:52,r:-1.8},{x:3,y:72,r:2.1},{x:8,y:88,r:-1},{x:6,y:42,r:0.8},
+    {x:78,y:12,r:1.5},{x:82,y:32,r:-2},{x:80,y:55,r:1.8},{x:85,y:75,r:-1.2},{x:78,y:92,r:0.6},{x:83,y:18,r:-0.8}
+  ];
+  frags.forEach((f,i)=>{
+    const p=positions[i%positions.length];
+    f.style.left=p.x+'%';f.style.top=p.y+'%';
+    f.style.setProperty('--r',p.r+'deg');
+    const delay=.3+i*.15;
+    f.style.animation=`floatFrag ${6+Math.random()*4}s ease-in-out infinite,fragIn .6s ${delay}s var(--e) forwards`;
+    f.style.setProperty('--mx',(Math.random()*16-8)+'px');
+    f.style.setProperty('--my',(Math.random()*14-7)+'px');
+  });
+  const style=document.createElement('style');
+  style.textContent=`@keyframes floatFrag{0%,100%{transform:translate(0,0) rotate(var(--r,0deg))}33%{transform:translate(var(--mx,5px),var(--my,-8px)) rotate(var(--r,0deg))}66%{transform:translate(calc(var(--mx,5px)*-0.6),calc(var(--my,-8px)*-0.7)) rotate(var(--r,0deg))}}@keyframes fragIn{from{opacity:0;transform:scale(.92)}to{opacity:.85;transform:scale(1)}}`;
+  document.head.appendChild(style);
+  if(window.innerWidth>768){
+    hero.addEventListener('mousemove',e=>{
+      const cx=e.clientX/window.innerWidth-.5,cy=e.clientY/window.innerHeight-.5;
+      frags.forEach((f,i)=>{const sp=parseFloat(f.dataset.speed)||.8;f.style.transform=`translate(${cx*sp*20}px,${cy*sp*15}px) rotate(${positions[i%positions.length].r}deg)`});
+    });
+  }
+})();
+</script>
+</body>
+</html>
