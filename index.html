@@ -288,6 +288,28 @@ h2 em{font-style:italic;color:var(--forest)}
 .intm{display:flex;align-items:center;gap:.35rem;font-size:.72rem;color:var(--txm);font-weight:500}
 .intc{width:24px;height:24px;border-radius:5px;background:var(--bg-w);border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:600;color:var(--tx2)}
 
+/* ═══ PRICING ═══ */
+.prc{padding:5rem 0;text-align:center}
+.prc .tag{justify-content:center}
+.prc h2{font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:.5rem}
+.prc-sub{color:var(--tx2);font-size:.82rem;font-weight:300;margin-bottom:2.5rem}
+.prc-g{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:680px;margin:0 auto}
+.prc-c{background:var(--bg-c);border:1px solid var(--bdr);border-radius:10px;padding:2rem 1.8rem;text-align:left;position:relative;transition:all .3s var(--e)}
+.prc-c:hover{border-color:var(--bdr-h);box-shadow:var(--sh)}
+.prc-c.pop{border-color:var(--forest);box-shadow:var(--sh-g)}
+.prc-badge{position:absolute;top:-10px;right:16px;background:var(--forest);color:white;font-size:.58rem;font-weight:600;padding:.2rem .65rem;border-radius:4px;letter-spacing:.06em;text-transform:uppercase}
+.prc-tier{font-family:var(--sf);font-size:1.1rem;margin-bottom:.15rem}
+.prc-price{font-family:var(--sf);font-size:2.2rem;font-weight:500;letter-spacing:-.02em;margin-bottom:.1rem}
+.prc-price span{font-size:.8rem;font-weight:400;color:var(--tx2)}
+.prc-desc{font-size:.72rem;color:var(--tx2);margin-bottom:1.2rem;font-weight:300}
+.prc-ul{list-style:none;margin-bottom:1.5rem}
+.prc-ul li{font-size:.72rem;color:var(--tx2);padding:.3rem 0;padding-left:1.2rem;position:relative}
+.prc-ul li::before{content:'✓';position:absolute;left:0;color:var(--forest);font-weight:600;font-size:.68rem}
+.prc-cta{display:inline-flex;align-items:center;padding:.6rem 1.4rem;font-size:.76rem;font-weight:600;border-radius:6px;transition:all .3s var(--e);text-decoration:none;width:100%;justify-content:center}
+.prc-cta.primary{background:var(--forest);color:white}.prc-cta.primary:hover{background:var(--forest-l);transform:translateY(-1px)}
+.prc-cta.secondary{background:transparent;color:var(--tx);border:1.5px solid var(--bdr)}.prc-cta.secondary:hover{border-color:var(--forest);color:var(--forest)}
+@media(max-width:768px){.prc-g{grid-template-columns:1fr}}
+
 /* ═══ CTA ═══ */
 .cta{padding:6rem 0;text-align:center;position:relative}
 .cta::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:400px;height:400px;background:radial-gradient(ellipse,rgba(46,110,74,.04),transparent 70%);pointer-events:none}
@@ -314,7 +336,7 @@ footer{padding:1.6rem 2.5rem;border-top:1px solid var(--bdr);display:flex;align-
 
 <nav>
   <a href="#" class="nl">Noda<span>loom</span></a>
-  <div class="nk"><a href="#method">Method</a><a href="#crystallisations">Crystallisations</a><a href="#forge">The Forge</a><a href="#translation">Translation</a><a href="https://app.nodaloom.com" class="btn bg">Sign In</a><a href="https://app.nodaloom.com" class="btn bf">Sign Up</a></div>
+  <div class="nk"><a href="#method">The Method</a><a href="#crystallisations">Insights</a><a href="#forge">The Forge</a><a href="#pricing">Pricing</a><a href="https://app.nodaloom.com" class="btn bg">Sign In</a><a href="https://app.nodaloom.com" class="btn bf">Sign Up</a></div>
   <div class="nb"><span></span><span></span><span></span></div>
 </nav>
 
@@ -515,6 +537,45 @@ footer{padding:1.6rem 2.5rem;border-top:1px solid var(--bdr);display:flex;align-
 
 <!-- Integrations -->
 <section class="intb"><div class="inti"><div class="intm"><div class="intc">Z</div> Zotero</div><div class="intm"><div class="intc">D</div> DeepL</div><div class="intm"><div class="intc">C</div> Claude</div><div class="intm"><div class="intc">G</div> Gemini</div></div></section>
+
+<!-- Pricing -->
+<section class="prc" id="pricing">
+  <div class="w">
+    <div class="tag rv">Simple, transparent pricing</div>
+    <h2 class="rv">Every tier gets full access to <em>every module.</em></h2>
+    <p class="prc-sub rv">No feature gates. All the tools, from day one.</p>
+    <div class="prc-g rv">
+      <div class="prc-c">
+        <div class="prc-tier">Free</div>
+        <div class="prc-price">$0<span>/month</span></div>
+        <p class="prc-desc">Explore the full platform. 5 session days per month.</p>
+        <ul class="prc-ul">
+          <li>All 6 modules — full access</li>
+          <li>AI Discussion, Reading, Writing</li>
+          <li>Source suggestions & network</li>
+          <li>Zotero integration</li>
+          <li>5 session days / month</li>
+          <li>3 simultaneous projects</li>
+        </ul>
+        <a href="https://app.nodaloom.com" class="prc-cta secondary">Get Started</a>
+      </div>
+      <div class="prc-c pop">
+        <div class="prc-badge">Most Popular</div>
+        <div class="prc-tier">Pro</div>
+        <div class="prc-price">$39<span>/month</span></div>
+        <p class="prc-desc">Unlimited access. No session limits. Write with confidence.</p>
+        <ul class="prc-ul">
+          <li>Everything in Free, plus:</li>
+          <li>Unlimited session days</li>
+          <li>Unlimited projects</li>
+          <li>Priority during peak hours</li>
+          <li>Early access to new features</li>
+        </ul>
+        <a href="https://app.nodaloom.com" class="prc-cta primary">Get Started</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- CTA -->
 <section class="cta" id="cta">
