@@ -1,6 +1,6 @@
-# Nodaloom — Landing Page
+# Tesyra — Landing Page
 
-Static landing page for [nodaloom.com](https://nodaloom.com).
+Static landing page for [tesyra.com](https://tesyra.com).
 
 ## Deploy
 
