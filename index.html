@@ -308,7 +308,12 @@ h2 em{font-style:italic;color:var(--forest)}
 .prc-cta{display:inline-flex;align-items:center;padding:.6rem 1.4rem;font-size:.76rem;font-weight:600;border-radius:6px;transition:all .3s var(--e);text-decoration:none;width:100%;justify-content:center}
 .prc-cta.primary{background:var(--forest);color:white}.prc-cta.primary:hover{background:var(--forest-l);transform:translateY(-1px)}
 .prc-cta.secondary{background:transparent;color:var(--tx);border:1.5px solid var(--bdr)}.prc-cta.secondary:hover{border-color:var(--forest);color:var(--forest)}
-@media(max-width:900px){.prc-g{grid-template-columns:1fr}}
+.prc-inst{margin-top:1.5rem;padding:1.2rem 1.6rem;background:var(--bg-w);border:1px solid var(--bdr);border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:1.2rem;flex-wrap:wrap}
+.prc-inst-l{display:flex;align-items:center;gap:.7rem;color:var(--tx2);font-size:.78rem;font-weight:300;flex:1;min-width:280px}
+.prc-inst-l svg{color:var(--txm);flex-shrink:0}
+.prc-inst-cta{font-family:var(--sf);font-size:.82rem;font-weight:500;color:var(--forest);text-decoration:none;white-space:nowrap;transition:color .2s var(--e)}
+.prc-inst-cta:hover{color:var(--forest-l)}
+@media(max-width:900px){.prc-g{grid-template-columns:1fr}.prc-inst{flex-direction:column;align-items:flex-start;gap:.8rem}}
 
 /* ═══ CTA ═══ */
 .cta{padding:6rem 0;text-align:center;position:relative}
@@ -416,7 +421,7 @@ footer{padding:1.6rem 2.5rem;border-top:1px solid var(--bdr);display:flex;align-
       <div class="lb">
         <div class="ls"><div class="ls-t">Nodaloom</div><div class="li"><div class="lic"></div> Dashboard</div><div class="li"><div class="lic"></div> The Reading</div><div class="li"><div class="lic"></div> The Discussion</div><div class="li ac"><div class="lic"></div> The Outline</div><div class="li"><div class="lic"></div> The Writing</div></div>
         <div class="lm">
-          <div class="ltb"><div class="ltb-b on">Spine</div><div class="ltb-b">Free</div><div class="ltb-b">Reorganise</div><div class="ltb-b">Section</div><div class="ltb-b">Argument</div><div class="ltb-b">Citation</div><div class="ltb-b g">Ask Opus</div><div class="ltb-b p">Translate</div><div class="ltb-b a">Crystallisations</div></div>
+          <div class="ltb"><div class="ltb-b on">Spine</div><div class="ltb-b">Free</div><div class="ltb-b">Reorganise</div><div class="ltb-b">Section</div><div class="ltb-b">Argument</div><div class="ltb-b">Citation</div><div class="ltb-b g">Ask Nodaloom</div><div class="ltb-b p">Translate</div><div class="ltb-b a">Crystallisations</div></div>
           <div class="sp">
             <div class="ss"><div class="sh2"><div class="sn2">1</div><div class="st2">Introduction: The Paradox of Light</div><div class="sd2">Frames the central paradox of illumination as progress</div></div><div class="sb2"><div class="su">1.1 Illumination as Ideology</div><div class="su">1.2 Research Question</div><div class="su cr">Insight: Critical inversion</div><div class="sm2"><span>Suggest sources</span><span>Write in Writing</span></div></div></div>
             <div class="ss"><div class="sh2"><div class="sn2">2</div><div class="st2">Theoretical Framework: Commons &amp; Property</div><div class="sd2">Develops the tripartite theoretical lens</div></div><div class="sb2"><div class="su">2.1 Night Sky as Commons</div><div class="su">2.2 Negative Property Rights</div><div class="su cr">Insight: Ostrom's limits</div><div class="su">2.3 Legal Geography</div><div class="sm2"><span>Suggest sources</span><span>Write in Writing</span></div></div></div>
@@ -505,13 +510,13 @@ footer{padding:1.6rem 2.5rem;border-top:1px solid var(--bdr);display:flex;align-
       <div class="tmk">
         <div class="tmk-h"><div class="tmk-l s">Español</div><span class="tmk-a">→</span><div class="tmk-l t">British English</div></div>
         <div class="tmk-bd"><div class="tmk-p"><div class="tln w9"></div><div class="tln w7"></div><div class="tln w8 gg"></div><div class="tln w6"></div><div style="height:.35rem"></div><div class="tln w95"></div><div class="tln w7"></div><div class="tln w8 gg"></div><div class="tln w9"></div></div><div class="tmk-p"><div class="tln w8 pp"></div><div class="tln w9"></div><div class="tln w7 pp"></div><div class="tln w6"></div><div style="height:.35rem"></div><div class="tln w9 pp"></div><div class="tln w8"></div><div class="tln w7 pp"></div><div class="tln w95"></div></div></div>
-        <div class="tmk-f"><span>DeepL base + Claude academic refinement</span><div class="badge">Academic register preserved</div></div>
+        <div class="tmk-f"><span>Hybrid translation + academic refinement</span><div class="badge">Academic register preserved</div></div>
       </div>
     </div>
     <div class="trans-t"><div class="tag rv">Academic Translation</div><h2 class="rv">Research in your language.<br>Publish in <em>any other.</em></h2><p class="trans-d rv">Write in your native language. The hybrid engine produces publication-ready prose preserving register, terminology, and conventions.</p>
       <div class="tfs rv">
-        <div class="tfi"><div class="tfi-c"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div> DeepL for high-fidelity base translation</div>
-        <div class="tfi"><div class="tfi-c"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div> Claude for academic register refinement</div>
+        <div class="tfi"><div class="tfi-c"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div> High-fidelity base translation</div>
+        <div class="tfi"><div class="tfi-c"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div> Academic register refinement</div>
         <div class="tfi"><div class="tfi-c"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div> Field-specific terminology preserved</div>
         <div class="tfi"><div class="tfi-c"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div> AI editorial review with tracked changes</div>
       </div>
@@ -536,7 +541,7 @@ footer{padding:1.6rem 2.5rem;border-top:1px solid var(--bdr);display:flex;align-
 </section>
 
 <!-- Integrations -->
-<section class="intb"><div class="inti"><div class="intm"><div class="intc">Z</div> Zotero</div><div class="intm"><div class="intc">D</div> DeepL</div><div class="intm"><div class="intc">C</div> Claude</div><div class="intm"><div class="intc">G</div> Gemini</div></div></section>
+<section class="intb"><div class="inti"><div class="intm"><div class="intc">Z</div> Zotero</div><div class="intm"><div class="intc">W</div> Word</div><div class="intm"><div class="intc">P</div> PDF</div><div class="intm"><div class="intc">L</div> LaTeX</div></div></section>
 
 <!-- Pricing -->
 <section class="prc" id="pricing">
@@ -548,45 +553,53 @@ footer{padding:1.6rem 2.5rem;border-top:1px solid var(--bdr);display:flex;align-
       <div class="prc-c">
         <div class="prc-tier">Explorer</div>
         <div class="prc-price">$0<span>/month</span></div>
-        <p class="prc-desc">Explore the platform. Read, discuss, and outline your research.</p>
+        <p class="prc-desc">Read, discuss, and outline your research.</p>
         <ul class="prc-ul">
-          <li>AI-guided research discussion</li>
-          <li>20 cristallisations / month</li>
-          <li>Auto-assign cristallisations (50%)</li>
-          <li>The Reading, Discussion, Outline</li>
-          <li>Source suggestions & Zotero</li>
-          <li>1 project</li>
+          <li>250 credits per month</li>
+          <li>1 project, 1 outline</li>
+          <li>15 documents, 100 MB storage</li>
+          <li>Full access to Reading, Discussion, Outline, Writing & Source Network</li>
+          <li>Intelligent crystallisation pre-assignment with the best model</li>
+          <li>Zotero sync, Word/PDF/LaTeX export</li>
         </ul>
-        <a href="https://app.nodaloom.com" class="prc-cta secondary">Get Started</a>
+        <a href="https://app.nodaloom.com" class="prc-cta secondary">Start free</a>
       </div>
       <div class="prc-c pop">
-        <div class="prc-badge">Best Value</div>
+        <div class="prc-badge">Most chosen</div>
         <div class="prc-tier">Researcher</div>
         <div class="prc-price">$19<span>/month</span></div>
-        <p class="prc-desc">Unlock The Writing. Translate, edit, and polish your research.</p>
+        <p class="prc-desc">For PhD students and active researchers.</p>
         <ul class="prc-ul">
           <li>Everything in Explorer, plus:</li>
-          <li>Extended AI discussion</li>
-          <li>50 cristallisations / month</li>
-          <li>Auto-assign cristallisations (100%)</li>
-          <li>The Writing — translate, edit & polish</li>
-          <li>AI academic editing</li>
+          <li>400 credits per month</li>
+          <li>3 projects, 3 outlines per project</li>
+          <li>30 documents per project, 300 MB storage</li>
+          <li>Weekly nightly research review on your most active outline</li>
+          <li>No usage caps on source suggestions or PDF analysis</li>
         </ul>
-        <a href="https://app.nodaloom.com" class="prc-cta primary">Get Started</a>
+        <a href="https://app.nodaloom.com" class="prc-cta primary">Choose Researcher</a>
       </div>
       <div class="prc-c">
         <div class="prc-tier">Academic Pro</div>
         <div class="prc-price">$39<span>/month</span></div>
-        <p class="prc-desc">Multiple projects. Unlimited cristallisations. Full capacity.</p>
+        <p class="prc-desc">For postdocs and full-time research.</p>
         <ul class="prc-ul">
           <li>Everything in Researcher, plus:</li>
-          <li>Full AI discussion capacity</li>
-          <li>Unlimited cristallisations</li>
+          <li>1,200 credits per month</li>
+          <li>5 projects, 5 outlines per project</li>
+          <li>50 documents per project, 500 MB storage</li>
+          <li>Daily nightly research review on your 3 most active outlines</li>
           <li>Extended writing capacity</li>
-          <li>5 simultaneous projects</li>
         </ul>
-        <a href="https://app.nodaloom.com" class="prc-cta secondary">Get Started</a>
+        <a href="https://app.nodaloom.com" class="prc-cta secondary">Choose Academic Pro</a>
       </div>
+    </div>
+    <div class="prc-inst rv">
+      <div class="prc-inst-l">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <span>Leading a research group, department, or institution? Talk to us about pricing for teams.</span>
+      </div>
+      <a href="mailto:hello@nodaloom.com?subject=Nodaloom%20for%20teams" class="prc-inst-cta">Talk to us →</a>
     </div>
   </div>
 </section>
