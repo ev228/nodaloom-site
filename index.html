@@ -4,43 +4,94 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tesyra — From Reading to Writing</title>
+<meta name="description" content="Tesyra accompanies academic researchers from reading sources to publishing the article. Read sources. Discuss ideas. Build structure. Write with confidence.">
+
+<!-- Favicons -->
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tesyra.com/">
+<meta property="og:title" content="Tesyra — From Reading to Writing">
+<meta property="og:description" content="Read sources. Discuss ideas. Build structure. Write with confidence.">
+<meta property="og:image" content="https://tesyra.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://tesyra.com/og-image.png">
+<meta name="twitter:title" content="Tesyra — From Reading to Writing">
+<meta name="twitter:description" content="Read sources. Discuss ideas. Build structure. Write with confidence.">
+
+<!-- Fonts: Literata (display), Source Sans 3 (body), JetBrains Mono (mono) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,wght@0,400;0,500;1,400;1,500&family=Source+Sans+3:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* ═══ BOTANICAL PALETTE ═══ */
-  --bg:#F0F4F1;
-  --bg-w:#E4EBE6;
-  --bg-d:#1A2420;
-  --bg-c:#FFFFFF;
-  --tx:#1E2E24;
-  --tx2:#4A5E50;
-  --txm:#7A8A80;
-  /* Primary */
-  --forest:#2E6E4A;
-  --forest-l:#3C8A5E;
-  --forest-bg:rgba(46,110,74,0.08);
-  --forest-br:rgba(46,110,74,0.18);
-  /* Accent — berry for drama */
-  --berry:#A44A5A;
-  --berry-bg:rgba(164,74,90,0.07);
-  --berry-br:rgba(164,74,90,0.15);
-  /* Secondary */
-  --blue:#4A6EA4;
-  --blue-bg:rgba(74,110,164,0.07);
-  --amber:#B8923A;
-  --amber-bg:rgba(184,146,58,0.08);
-  --amber-br:rgba(184,146,58,0.16);
-  --plum:#6E5A82;
-  --plum-bg:rgba(110,90,130,0.07);
+  /* ═══ TESYRA BRAND TOKENS ═══ */
+  /* Surfaces */
+  --bg:#F0F4F1;          /* off-white paper · main background */
+  --bg-w:#E8ECE8;         /* subtle alt surface */
+  --bg-d:#141414;         /* dark sections */
+  --bg-c:#FFFFFF;         /* cards, panels */
+  --surface:#FFFFFF;
+  /* Text */
+  --primary:#1A1A1A;      /* body, headings */
+  --secondary:#6B6560;    /* labels, captions */
+  --muted:#9B968F;        /* tooltips, meta */
+  --tx:#1A1A1A;           /* alias: primary */
+  --tx2:#6B6560;          /* alias: secondary */
+  --txm:#9B968F;          /* alias: muted */
+  /* Brand */
+  --accent:#1A6B5A;       /* brand · CTA primary · focus */
+  --accent-l:#226E5E;     /* hover */
+  --accent2:#C4841D;      /* secondary accent */
+  --accent-bg:rgba(26,107,90,0.08);
+  --accent-br:rgba(26,107,90,0.18);
+  /* Module palette */
+  --reading:#2D6A4F;
+  --discussion:#2B4C7E;
+  --outline:#B85C38;
+  --litreview:#A67C37;
+  --writing:#7B2D8E;
+  /* Module backgrounds (for tints) */
+  --reading-bg:rgba(45,106,79,0.08);
+  --discussion-bg:rgba(43,76,126,0.07);
+  --outline-bg:rgba(184,92,56,0.07);
+  --outline-br:rgba(184,92,56,0.15);
+  --litreview-bg:rgba(166,124,55,0.08);
+  --litreview-br:rgba(166,124,55,0.16);
+  --writing-bg:rgba(123,45,142,0.07);
+  /* Legacy aliases (mapped to brand tokens for back-compat) */
+  --forest:var(--accent);
+  --forest-l:var(--accent-l);
+  --forest-bg:var(--accent-bg);
+  --forest-br:var(--accent-br);
+  --berry:var(--outline);
+  --berry-bg:var(--outline-bg);
+  --berry-br:var(--outline-br);
+  --blue:var(--discussion);
+  --blue-bg:var(--discussion-bg);
+  --amber:var(--litreview);
+  --amber-bg:var(--litreview-bg);
+  --amber-br:var(--litreview-br);
+  --plum:var(--writing);
+  --plum-bg:var(--writing-bg);
   /* Utility */
-  --bdr:rgba(30,46,36,0.08);
-  --bdr-h:rgba(46,110,74,0.18);
-  --sh:0 12px 40px rgba(26,36,32,0.07);
-  --sh-g:0 6px 24px rgba(46,110,74,0.1);
-  --sf:'Playfair Display',Georgia,serif;
-  --sn:'Outfit',system-ui,sans-serif;
+  --bdr:#D6D6D2;          /* rule */
+  --bdr-h:rgba(26,107,90,0.22);
+  --sh:0 2px 8px rgba(0,0,0,0.06);
+  --sh-m:0 4px 16px rgba(0,0,0,0.10);
+  --sh-g:0 6px 24px rgba(26,107,90,0.10);
+  /* Typography */
+  --sf:'Literata',Georgia,serif;                    /* display */
+  --sn:'Source Sans 3',system-ui,sans-serif;        /* body */
+  --sm:'JetBrains Mono',ui-monospace,monospace;     /* mono */
+  /* Layout */
   --mw:1140px;
   --e:cubic-bezier(.25,.46,.45,.94);
 }
@@ -52,7 +103,7 @@ a{color:inherit;text-decoration:none}
 
 /* ── Nav ── */
 nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:.85rem 2.5rem;display:flex;align-items:center;justify-content:space-between;background:rgba(240,244,241,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr)}
-.nl{font-family:var(--sf);font-size:1.45rem;font-weight:500;letter-spacing:-.01em}.nl span{color:var(--forest)}
+.nl{display:inline-flex;align-items:center;color:var(--accent);text-decoration:none}.nl svg{height:30px;width:auto;display:block}
 .nk{display:flex;align-items:center;gap:2rem}
 .nk a{font-size:.78rem;font-weight:500;color:var(--tx2);transition:color .3s}.nk a:hover{color:var(--forest)}
 .nk a.btn.bf{color:#FFFFFF !important}.nk a.btn.bf:hover{color:#FFFFFF !important}
@@ -325,7 +376,7 @@ h2 em{font-style:italic;color:var(--forest)}
 
 /* ═══ FOOTER ═══ */
 footer{padding:1.6rem 2.5rem;border-top:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
-.fl{font-family:var(--sf);font-size:.9rem;color:var(--txm)}.fl span{color:var(--forest);opacity:.5}
+.fl{display:inline-flex;align-items:center;color:var(--txm)}.fl svg{height:18px;width:auto;display:block;opacity:.75}
 .fk{display:flex;gap:1.2rem}.fk a{font-size:.68rem;color:var(--txm)}.fk a:hover{color:var(--forest)}
 .fc{font-size:.6rem;color:var(--txm);opacity:.4}
 
@@ -340,7 +391,7 @@ footer{padding:1.6rem 2.5rem;border-top:1px solid var(--bdr);display:flex;align-
 <body>
 
 <nav>
-  <a href="#" class="nl">Tes<span>yra</span></a>
+  <a href="#top" class="nl" aria-label="Tesyra"><svg viewBox="0 0 360 96" role="img" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><line x1="22" y1="20" x2="22" y2="76"/><line x1="22" y1="28" x2="74" y2="28"/><line x1="22" y1="44" x2="62" y2="44"/><line x1="22" y1="60" x2="50" y2="60"/><line x1="22" y1="76" x2="74" y2="76"/></g><text x="120" y="68" font-family="Literata, Georgia, serif" font-weight="400" font-size="62" letter-spacing="-1.2" fill="currentColor">tesyra</text></svg></a>
   <div class="nk"><a href="#method">The Method</a><a href="#crystallisations">Insights</a><a href="#forge">The Discussion</a><a href="#pricing">Pricing</a><a href="https://app.tesyra.com" class="btn bg">Sign In</a><a href="https://app.tesyra.com" class="btn bf">Sign Up</a></div>
   <div class="nb"><span></span><span></span><span></span></div>
 </nav>
@@ -608,7 +659,7 @@ footer{padding:1.6rem 2.5rem;border-top:1px solid var(--bdr);display:flex;align-
   <div class="ctai"><h2 class="rv">Your ideas deserve better<br>than a <em>blank page.</em></h2><p class="rv">Stop losing insights. Start building arguments.</p><div class="cta-b rv"><a href="https://app.tesyra.com" class="btn bf">Sign Up — It's Free</a><a href="https://app.tesyra.com" class="btn bg">Sign In</a></div></div>
 </section>
 
-<footer><div class="fl">Tes<span>yra</span></div><div class="fk"><a href="/legal/terms">Terms</a><a href="/legal/privacy">Privacy</a><a href="/legal/dpa">DPA</a><a href="mailto:hello@tesyra.com">Contact</a></div><div class="fc">© 2026 Tesyra</div></footer>
+<footer><div class="fl" aria-label="Tesyra"><svg viewBox="0 0 480 120" role="img" aria-hidden="true" focusable="false"><text x="240" y="92" text-anchor="middle" font-family="Literata, Georgia, serif" font-weight="400" font-size="100" letter-spacing="-2" fill="currentColor">tesyra</text></svg></div><div class="fk"><a href="/legal/terms">Terms</a><a href="/legal/privacy">Privacy</a><a href="/legal/dpa">DPA</a><a href="mailto:hello@tesyra.com">Contact</a></div><div class="fc">© 2026 Tesyra</div></footer>
 
 <script>
 // Scroll reveals
