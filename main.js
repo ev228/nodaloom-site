@@ -152,13 +152,8 @@ function applyTweaks() {
   if (demo) {
     demo.style.display = tweaks.showVideo ? '' : 'none';
     const vid = demo.querySelector('video');
-    if (vid) {
-      if (tweaks.showVideo) {
-        const p = vid.play();
-        if (p && p.catch) p.catch(() => {});
-      } else {
-        vid.pause();
-      }
+    if (vid && !tweaks.showVideo) {
+      vid.pause();
     }
   }
 }
@@ -307,4 +302,48 @@ applyTweaks();
     b.addEventListener('click', () => setTimeout(sync, 0));
   });
   sync();
+})();
+
+// ============== DEMO VIDEO — start after 2s centered on screen ==============
+(function () {
+  const vid = document.querySelector('.demo-frame video');
+  if (!vid) return;
+  const DWELL_MS = 2000;
+  let dwellTimer = null;
+  let started = false;
+
+  // "Centered" = the viewport's vertical midpoint falls within the video box.
+  function isCentered() {
+    const r = vid.getBoundingClientRect();
+    if (r.height === 0) return false;
+    const mid = window.innerHeight / 2;
+    return r.top <= mid && r.bottom >= mid;
+  }
+
+  function evaluate() {
+    if (started) return;
+    if (isCentered()) {
+      vid.preload = 'auto'; // buffer during the dwell so playback starts clean
+      if (dwellTimer == null) {
+        dwellTimer = window.setTimeout(() => {
+          started = true;
+          const p = vid.play();
+          if (p && p.catch) p.catch(() => {});
+          cleanup();
+        }, DWELL_MS);
+      }
+    } else if (dwellTimer != null) {
+      clearTimeout(dwellTimer);
+      dwellTimer = null;
+    }
+  }
+
+  function cleanup() {
+    window.removeEventListener('scroll', evaluate);
+    window.removeEventListener('resize', evaluate);
+  }
+
+  window.addEventListener('scroll', evaluate, { passive: true });
+  window.addEventListener('resize', evaluate, { passive: true });
+  evaluate(); // handle the case where the video is already centered on load
 })();
