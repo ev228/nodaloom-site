@@ -211,6 +211,18 @@ p { hyphens: auto; -webkit-hyphens: auto; }
 }
 .signin:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
+.signup {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--accent);
+  padding: 7px 14px;
+  border-radius: 3px;
+}
+.signup:hover { background: var(--accent-deep); }
+
 /* Folio strip — issue / volume metadata under masthead */
 .folio {
   display: grid;
@@ -1301,6 +1313,7 @@ p { hyphens: auto; -webkit-hyphens: auto; }
         <button data-lang="en" class="on">EN</button>
       </div>
       <a href="https://app.tesyra.com" class="signin" data-key="mast.signin">Sign in</a>
+      <a href="https://app.tesyra.com" class="signup" data-key="mast.signup">Sign up</a>
     </div>
   </header>
 

@@ -2,6 +2,7 @@ window.DICT = {
   en: {
     "mast.tagline": "A platform for academic research",
     "mast.signin": "Sign in",
+    "mast.signup": "Sign up",
     "folio.l": "Tesyra Press",
     "folio.c1": "<em>Vol. I</em> · Issue 01",
     "folio.c2": "Published from Santiago",
@@ -149,6 +150,7 @@ window.DICT = {
   es: {
     "mast.tagline": "Una plataforma para la investigación académica",
     "mast.signin": "Entrar",
+    "mast.signup": "Crear cuenta",
     "folio.l": "Tesyra Press",
     "folio.c1": "<em>Vol. I</em> · Núm. 01",
     "folio.c2": "Publicado desde Santiago",
