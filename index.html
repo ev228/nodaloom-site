@@ -3,618 +3,1806 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tesyra — From Reading to Writing</title>
+<title>Tesyra — Be happy thinking. Everything is there.</title>
+<meta name="description" content="A research platform for academic researchers. From reading sources to writing the article — structured thinking, assisted.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,300;0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,300;1,7..72,400;1,7..72,500;1,7..72,600&family=JetBrains+Mono:wght@400;500&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* ═══ BOTANICAL PALETTE ═══ */
-  --bg:#F0F4F1;
-  --bg-w:#E4EBE6;
-  --bg-d:#1A2420;
-  --bg-c:#FFFFFF;
-  --tx:#1E2E24;
-  --tx2:#4A5E50;
-  --txm:#7A8A80;
-  /* Primary */
-  --forest:#2E6E4A;
-  --forest-l:#3C8A5E;
-  --forest-bg:rgba(46,110,74,0.08);
-  --forest-br:rgba(46,110,74,0.18);
-  /* Accent — berry for drama */
-  --berry:#A44A5A;
-  --berry-bg:rgba(164,74,90,0.07);
-  --berry-br:rgba(164,74,90,0.15);
-  /* Secondary */
-  --blue:#4A6EA4;
-  --blue-bg:rgba(74,110,164,0.07);
-  --amber:#B8923A;
-  --amber-bg:rgba(184,146,58,0.08);
-  --amber-br:rgba(184,146,58,0.16);
-  --plum:#6E5A82;
-  --plum-bg:rgba(110,90,130,0.07);
-  /* Utility */
-  --bdr:rgba(30,46,36,0.08);
-  --bdr-h:rgba(46,110,74,0.18);
-  --sh:0 12px 40px rgba(26,36,32,0.07);
-  --sh-g:0 6px 24px rgba(46,110,74,0.1);
-  --sf:'Playfair Display',Georgia,serif;
-  --sn:'Outfit',system-ui,sans-serif;
-  --mw:1140px;
-  --e:cubic-bezier(.25,.46,.45,.94);
+  --paper:       #F0F4F1;
+  --paper-warm:  #ECE9DE;
+  --vellum:      #F4F0E5;
+  --surface:     #FFFFFF;
+  --ink:         #14201C;
+  --ink-soft:    #2A3530;
+  --muted:       #5F6962;
+  --muted-2:     #8A9089;
+  --rule:        #B4B7AB;
+  --rule-soft:   #D5D7CB;
+  --accent:      #1A6B5A;
+  --accent-deep: #134E42;
+  --accent-soft: rgba(26, 107, 90, 0.10);
+  --carmine:     #983A33;
+  --bronze:      #B07A2A;
+
+  --reading:     #2D6A4F;
+  --discussion:  #2B4C7E;
+  --outline:     #B85C38;
+  --litreview:   #A67C37;
+  --writing:     #7B2D8E;
+
+  --serif: 'Literata', 'Source Serif Pro', 'Iowan Old Style', Georgia, serif;
+  --sans:  'Source Sans 3', system-ui, -apple-system, sans-serif;
+  --mono:  'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+  --rail: clamp(28px, 6vw, 88px);     /* left spine column width */
+  --pad-x: clamp(20px, 4vw, 56px);    /* page horizontal padding */
+  --maxw: 1280px;
+  --read: 720px;                       /* reading column max */
+  --ease: cubic-bezier(.22,.8,.24,1);
 }
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--tx);font-family:var(--sn);font-weight:400;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-::selection{background:var(--forest-bg);color:var(--forest)}
-a{color:inherit;text-decoration:none}
 
-/* ── Nav ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:.85rem 2.5rem;display:flex;align-items:center;justify-content:space-between;background:rgba(240,244,241,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr)}
-.nl{font-family:var(--sf);font-size:1.45rem;font-weight:500;letter-spacing:-.01em}.nl span{color:var(--forest)}
-.nk{display:flex;align-items:center;gap:2rem}
-.nk a{font-size:.78rem;font-weight:500;color:var(--tx2);transition:color .3s}.nk a:hover{color:var(--forest)}
-.nk a.btn.bf{color:#FFFFFF !important}.nk a.btn.bf:hover{color:#FFFFFF !important}
-.btn{display:inline-flex;align-items:center;padding:.55rem 1.3rem;font-family:var(--sn);font-size:.78rem;font-weight:600;border-radius:6px;cursor:pointer;transition:all .3s var(--e);border:none}
-.bf{background:var(--forest);color:white}.bf:hover{background:var(--forest-l);transform:translateY(-1px);box-shadow:var(--sh-g)}
-.bg{background:transparent;color:var(--tx);border:1.5px solid var(--bdr)}.bg:hover{border-color:var(--forest);color:var(--forest)}
-.nb{display:none;cursor:pointer}.nb span{display:block;width:18px;height:1.5px;background:var(--tx2);margin-bottom:4px}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+::selection { background: var(--accent-soft); color: var(--accent-deep); }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; }
+img, svg { display: block; }
+em, i { font-style: italic; }
 
-/* ── Shared ── */
-.w{max-width:var(--mw);margin:0 auto;padding:0 2.5rem}
-.tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.66rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--forest);margin-bottom:1rem}
-.tag::before{content:'';width:16px;height:1.5px;background:currentColor}
-h2{font-family:var(--sf);font-weight:400;line-height:1.15;letter-spacing:-.02em}
-h2 em{font-style:italic;color:var(--forest)}
-.rv{opacity:0;transform:translateY(24px);transition:all .65s var(--e)}.rv.v{opacity:1;transform:translateY(0)}
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+.mono {
+  font-family: var(--mono);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+.mono-caps {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.mono-caps.accent { color: var(--accent); }
+.mono-caps.carmine { color: var(--carmine); }
 
-/* ═══ HERO: CHAOS + TIMELINE ═══ */
-.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:5rem 2rem 1.5rem;overflow:hidden}
+h1, h2, h3, h4 {
+  font-family: var(--serif);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  color: var(--ink);
+  text-wrap: balance;
+}
+h1 em, h2 em, h3 em { font-style: italic; }
 
-/* Scattered fragments — background chaos */
-.chaos-field{position:absolute;inset:0;z-index:0;pointer-events:none}
-.cf{position:absolute;padding:.35rem .65rem;background:var(--bg-c);border-radius:3px;font-size:.55rem;font-weight:400;white-space:nowrap;border-left:2.5px solid;box-shadow:0 1px 6px rgba(26,36,32,.03);line-height:1.3}
-.cf.dim{opacity:.1}.cf.mid{opacity:.18}.cf.vis{opacity:.3}
-.cf.note{border-color:var(--amber);color:var(--amber)}
-.cf.ref{border-color:var(--plum);color:var(--plum)}
-.cf.idea{border-color:var(--forest);color:var(--forest)}
-.cf.lost{border-color:var(--berry);color:var(--berry);background:#FFFAFA}
-.cf.pdf{border-color:var(--blue);color:var(--blue)}
+.serif-italic { font-family: var(--serif); font-style: italic; font-weight: 400; }
 
-.hero-center{position:relative;z-index:5;max-width:700px;padding:2rem 0}
-.hero-center h1{font-family:var(--sf);font-size:clamp(2.6rem,5.5vw,4.4rem);font-weight:400;line-height:1.08;letter-spacing:-.03em;margin-bottom:1.2rem}
-.hero-center h1 .line{display:block}
-.hero-center h1 em{font-style:italic;color:var(--berry);font-weight:500}
-.hero-center h1 .line:nth-child(1){opacity:0;animation:hl .7s var(--e) .3s forwards}
-.hero-center h1 .line:nth-child(2){opacity:0;animation:hl .7s var(--e) .55s forwards}
-.hero-center h1 .line:nth-child(3){opacity:0;animation:hl .7s var(--e) .8s forwards}
-.hero-sub{font-size:1rem;font-weight:300;color:var(--tx2);line-height:1.75;max-width:470px;margin:0 auto 2.2rem;opacity:0;animation:fu .7s var(--e) 1.1s forwards}
-.hero-cta{display:flex;gap:.8rem;justify-content:center;opacity:0;animation:fu .7s var(--e) 1.3s forwards}
+p { hyphens: auto; -webkit-hyphens: auto; }
 
-/* Timeline of Loss */
-.tl-section{position:relative;z-index:5;padding:1.5rem 0 0;width:100%;opacity:0;animation:fu .7s var(--e) 1.6s forwards}
-.timeline{width:100%;overflow:hidden;position:relative;padding:1rem 0}
-.timeline::before,.timeline::after{content:'';position:absolute;top:0;bottom:0;width:140px;z-index:2;pointer-events:none}
-.timeline::before{left:0;background:linear-gradient(to right,var(--bg),transparent)}
-.timeline::after{right:0;background:linear-gradient(to left,var(--bg),transparent)}
-.tl-track{display:flex;gap:.8rem;animation:tlscroll 40s linear infinite;width:max-content}
-@keyframes tlscroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.tl-card{flex-shrink:0;width:230px;padding:.9rem 1rem;background:var(--bg-c);border:1px solid var(--bdr);border-radius:8px;text-align:left;position:relative;overflow:hidden;box-shadow:0 2px 8px rgba(26,36,32,.03);transition:transform .3s var(--e)}
-.tl-card:hover{transform:translateY(-2px)}
-.tl-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2.5px}
-.tl-card.lost::before{background:var(--berry)}
-.tl-card.forgot::before{background:var(--amber)}
-.tl-card.buried::before{background:var(--plum)}
-.tl-card.scattered::before{background:var(--blue)}
-.tl-type{font-size:.48rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.25rem}
-.tl-card.lost .tl-type{color:var(--berry)}
-.tl-card.forgot .tl-type{color:var(--amber)}
-.tl-card.buried .tl-type{color:var(--plum)}
-.tl-card.scattered .tl-type{color:var(--blue)}
-.tl-title{font-family:var(--sf);font-size:.78rem;color:var(--tx);line-height:1.25;margin-bottom:.2rem}
-.tl-desc{font-size:.58rem;color:var(--txm);line-height:1.45}
-.tl-when{font-size:.48rem;color:var(--txm);margin-top:.35rem;opacity:.5;font-style:italic}
-.tl-stamp{position:absolute;right:.5rem;bottom:.5rem;font-size:.45rem;font-weight:700;color:var(--berry);opacity:.12;text-transform:uppercase;transform:rotate(-12deg);letter-spacing:.05em}
+/* ============================================================
+   PAGE FRAME — masthead, spine, layout
+   ============================================================ */
+.page {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 var(--pad-x);
+  position: relative;
+}
 
-/* Closing question */
-.closing-q{text-align:center;padding:1.8rem 2rem .5rem;position:relative;z-index:5;opacity:0;animation:fu .7s var(--e) 2s forwards}
-.closing-q p{font-family:var(--sf);font-size:clamp(1.1rem,2.2vw,1.5rem);font-weight:400;font-style:italic;color:var(--tx2);max-width:520px;margin:0 auto;line-height:1.45}
-.closing-q p em{color:var(--berry);font-weight:500}
-.scroll-cue{display:flex;flex-direction:column;align-items:center;gap:.3rem;padding-top:1.5rem;opacity:0;animation:fu .7s var(--e) 2.3s forwards}
-.scroll-cue span{font-size:.55rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--txm)}
-.scroll-cue .sl{width:1px;height:24px;background:linear-gradient(to bottom,var(--forest),transparent);animation:sp 2s ease-in-out infinite}
+/* The vertical spine — literal page rib in accent green */
+.spine {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: calc(var(--pad-x) + var(--rail) / 2);
+  width: 1px;
+  background: var(--accent);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+}
+.spine::before, .spine::after {
+  content: '';
+  position: absolute; left: -2.5px;
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+.spine::before { top: 0; }
+.spine::after  { bottom: 0; }
 
-/* ═══ RESOLUTION ═══ */
-.resolution{padding:5rem 0 2rem;text-align:center}
-.resolution h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:.7rem}
-.res-sub{font-size:.95rem;color:var(--tx2);font-weight:300;line-height:1.7;margin-bottom:3rem;max-width:480px;margin-left:auto;margin-right:auto}
+/* Section anchor mark — a small horizontal tick coming off the spine */
+.tick {
+  position: absolute;
+  left: calc(var(--rail) / -2);
+  top: 18px;
+  width: calc(var(--rail) - 8px);
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.6;
+}
+.tick::before {
+  content: '';
+  position: absolute;
+  right: -3px; top: -2.5px;
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+}
 
-/* Loom Frame */
-.lf{max-width:1020px;margin:0 auto;padding:0 2.5rem}
-.lfr{background:var(--bg-c);border-radius:12px;border:1px solid var(--bdr);box-shadow:var(--sh);overflow:hidden}
-.lt{display:flex;align-items:center;gap:.5rem;padding:.65rem 1rem;background:var(--bg-w);border-bottom:1px solid var(--bdr)}
-.td{width:7px;height:7px;border-radius:50%}.td:nth-child(1){background:#FF6058}.td:nth-child(2){background:#FFBD2E}.td:nth-child(3){background:#27CA41}
-.tl2{margin-left:auto;font-size:.62rem;color:var(--txm);font-weight:500}
-.lb{display:flex}
-.ls{width:150px;flex-shrink:0;background:var(--bg-w);border-right:1px solid var(--bdr);padding:.9rem 0}
-.ls-t{font-family:var(--sf);font-size:.82rem;padding:0 .7rem;margin-bottom:.6rem;font-weight:500}
-.li{display:flex;align-items:center;gap:.4rem;padding:.32rem .7rem;font-size:.65rem;color:var(--txm)}
-.li.ac{color:var(--forest);background:var(--forest-bg);border-right:2px solid var(--forest);font-weight:500}
-.lic{width:12px;height:12px;border-radius:3px;background:var(--bdr);flex-shrink:0}
-.li.ac .lic{background:var(--forest-bg);border:1px solid var(--forest)}
-.lm{flex:1;padding:.9rem;overflow-x:auto}
-.ltb{display:flex;gap:.35rem;margin-bottom:.7rem;flex-wrap:wrap}
-.ltb-b{padding:.18rem .45rem;border-radius:3px;font-size:.55rem;font-weight:500;border:1px solid var(--bdr);color:var(--tx2);background:var(--bg-c)}
-.ltb-b.on{background:var(--berry-bg);color:var(--berry);border-color:var(--berry-br)}
-.ltb-b.g{background:var(--forest-bg);color:var(--forest);border-color:var(--forest-br)}
-.ltb-b.p{background:var(--plum-bg);color:var(--plum);border-color:rgba(110,90,130,.15)}
-.ltb-b.a{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-br)}
+/* Masthead */
+.masthead {
+  position: relative;
+  padding-top: 22px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--rule-soft);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 30px;
+}
+.mast-mark {
+  display: flex; align-items: center; gap: 12px;
+}
+.mast-mark .wordmark {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 23px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.mast-mark .wordmark em { color: var(--accent); font-style: normal; }
+.mast-center {
+  text-align: center;
+}
+.mast-right {
+  display: flex; align-items: center; gap: 18px;
+}
 
-.sp{display:flex;gap:.7rem;min-height:230px}
-.ss{min-width:185px;flex-shrink:0;background:var(--bg-w);border-radius:6px;border:1px solid var(--bdr);overflow:hidden}
-.sh2{padding:.55rem .65rem;border-bottom:1px solid var(--bdr);position:relative}
-.sn2{font-family:var(--sf);font-size:1.5rem;position:absolute;right:.5rem;top:.3rem;opacity:.08;font-weight:400}
-.st2{font-size:.57rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--tx);line-height:1.22;max-width:145px}
-.sd2{font-size:.48rem;color:var(--txm);line-height:1.3;margin-top:.15rem;max-width:150px}
-.sb2{padding:.35rem;display:flex;flex-direction:column;gap:.25rem}
-.su{padding:.35rem .45rem;background:var(--bg-c);border:1px solid var(--bdr);border-radius:3px;font-size:.52rem;font-weight:500;color:var(--tx2);line-height:1.2}
-.su.cr{border-color:var(--amber-br);background:var(--amber-bg);padding-left:.75rem;position:relative}
-.su.cr::before{content:'◆';position:absolute;left:.25rem;top:50%;transform:translateY(-50%);color:var(--amber);font-size:.32rem}
-.sm2{display:flex;gap:.2rem;margin-top:.12rem}
-.sm2 span{font-size:.42rem;color:var(--forest);font-weight:500;opacity:.6}
+.lang-switch {
+  display: inline-flex;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 1px;
+}
+.lang-switch button {
+  background: transparent; border: 0;
+  padding: 4px 9px;
+  border-radius: 999px;
+  color: var(--muted);
+}
+.lang-switch button.on { background: var(--ink); color: var(--paper); }
 
-/* ═══ METHOD ═══ */
-.method{padding:6rem 0;background:var(--bg-d);color:white;position:relative;overflow:hidden}
-.method::before{content:'';position:absolute;top:-40%;left:-10%;width:120%;height:180%;background:radial-gradient(ellipse at 25% 35%,rgba(46,110,74,.06) 0%,transparent 55%);pointer-events:none}
-.mi{position:relative}
-.mhd{text-align:center;margin-bottom:3.5rem}
-.method .tag{color:var(--forest-l)}.method .tag::before{background:var(--forest-l)}
-.mhd h2{color:white;font-size:clamp(1.8rem,3.5vw,2.6rem);max-width:600px;margin:0 auto .7rem}
-.mhd h2 em{color:var(--forest-l)}
-.mh-s{color:rgba(255,255,255,.42);font-size:.92rem;max-width:460px;margin:0 auto;font-weight:300;line-height:1.7}
+.signin {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 1px;
+}
+.signin:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
-.mf{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative}
-.mf::before{content:'';position:absolute;top:28px;left:10%;right:10%;height:1px;background:rgba(46,110,74,.18)}
-.ms{text-align:center;padding:0 .7rem;position:relative}
-.ms-i{width:56px;height:56px;margin:0 auto .8rem;border-radius:50%;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;position:relative;z-index:1;transition:all .4s var(--e)}
-.ms:hover .ms-i{background:rgba(46,110,74,.08);border-color:rgba(46,110,74,.22);transform:translateY(-3px)}
-.ms-i svg{width:20px;height:20px;stroke:var(--forest-l);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-.ms-n{font-family:var(--sf);font-size:.95rem;color:white;margin-bottom:.12rem}
-.ms-l{font-size:.58rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.35rem}
-.ms-l.c1{color:var(--forest-l)}.ms-l.c2{color:#A897D4}.ms-l.c3{color:#7DB4A0}.ms-l.c4{color:#D4A87D}.ms-l.c5{color:#D47D8A}
-.ms-d{font-size:.7rem;color:rgba(255,255,255,.33);line-height:1.42;max-width:170px;margin:0 auto}
+/* Folio strip — issue / volume metadata under masthead */
+.folio {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  padding: 9px 0 18px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.folio span { display: block; }
+.folio span:nth-child(2),
+.folio span:nth-child(3) { text-align: center; }
+.folio span:last-child { text-align: right; }
+.folio em { font-style: italic; color: var(--ink); }
 
-/* ═══ CRYSTALLISATIONS ═══ */
-.crys{padding:7rem 0;overflow:hidden}
-.crys-g{display:grid;grid-template-columns:1fr 1.15fr;gap:3.5rem;align-items:center}
-.crys-t h2{font-size:clamp(1.8rem,3vw,2.4rem);margin-bottom:.7rem}
-.crys-d{color:var(--tx2);font-size:.9rem;line-height:1.75;margin-bottom:1.3rem;max-width:400px}
-.cflo{display:flex;flex-direction:column;gap:0}
-.cfs{display:flex;align-items:center;gap:.7rem;padding:.55rem 0}
-.cfn{width:26px;height:26px;border-radius:50%;background:var(--forest-bg);color:var(--forest);font-size:.62rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.cft{font-size:.82rem;color:var(--tx2);line-height:1.45}.cft strong{color:var(--tx);font-weight:500}
-.cfc{width:26px;display:flex;justify-content:center;padding:.05rem 0}
-.cfc-l{width:1px;height:10px;background:var(--forest);opacity:.15}
+/* ============================================================
+   SECTION ARCHITECTURE
+   ============================================================ */
+.sect {
+  position: relative;
+  padding-left: var(--rail);
+  padding-top: clamp(80px, 12vw, 180px);
+  padding-bottom: clamp(60px, 9vw, 130px);
+}
+.sect-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 24px;
+  display: flex; align-items: baseline; gap: 14px;
+}
+.sect-label .sect-num {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  letter-spacing: 0;
+  color: var(--ink);
+  text-transform: none;
+}
+.sect-label .sect-rule { flex: 1; height: 1px; background: var(--rule); margin-bottom: 5px; opacity: 0.6; max-width: 120px; }
 
-/* Crystal mockup */
-.cmk{background:var(--bg-c);border-radius:10px;border:1px solid var(--bdr);box-shadow:var(--sh);overflow:hidden}
-.cmk-h{padding:.55rem .9rem;background:var(--bg-w);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:.4rem}
-.cmk-h .dia{color:var(--amber);font-size:.65rem}
-.cmk-h .tit{font-size:.72rem;font-weight:600;color:var(--tx)}
-.cmk-b{padding:.8rem}
-.cmk-s{width:100%;padding:.32rem .5rem;border:1px solid var(--bdr);border-radius:4px;font-size:.58rem;color:var(--txm);background:var(--bg-w);margin-bottom:.6rem}
-.cmk-c{padding:.6rem;border:1px solid var(--bdr);border-radius:5px;margin-bottom:.4rem;background:var(--bg-c);transition:all .3s var(--e)}
-.cmk-c:hover{border-color:var(--bdr-h);box-shadow:0 1px 4px rgba(0,0,0,.03)}
-.cmk-badge{display:inline-block;padding:.08rem .35rem;font-size:.47rem;font-weight:600;border-radius:3px;margin-bottom:.2rem}
-.cmk-badge.be{background:var(--forest-bg);color:var(--forest)}
-.cmk-badge.bt{background:var(--plum-bg);color:var(--plum)}
-.cmk-badge.bm{background:var(--blue-bg);color:var(--blue)}
-.cmk-badge.bs{background:var(--berry-bg);color:var(--berry)}
-.cmk-ct{font-size:.65rem;font-weight:500;color:var(--tx);line-height:1.25;margin-bottom:.1rem}
-.cmk-cx{font-size:.52rem;color:var(--txm);line-height:1.3}
-.cmk-ca{font-size:.52rem;color:var(--forest);font-weight:500;margin-top:.2rem}
-.cmk-tr{font-size:.54rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--txm);margin-top:.7rem;margin-bottom:.35rem}
-.cmk-ti{display:flex;align-items:center;gap:.3rem;font-size:.54rem;color:var(--tx2);margin-bottom:.18rem}
-.cmk-td{width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0}
+/* ============================================================
+   HERO — MONUMENT
+   ============================================================ */
+.hero {
+  padding-left: var(--rail);
+  padding-top: clamp(70px, 10vw, 140px);
+  padding-bottom: clamp(80px, 12vw, 160px);
+  position: relative;
+  min-height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: clamp(30px, 6vw, 90px);
+  align-items: center;
+}
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 36px;
+  display: flex; align-items: center; gap: 14px;
+}
+.hero-eyebrow .dot {
+  width: 6px; height: 6px;
+  background: var(--carmine);
+  border-radius: 50%;
+  display: inline-block;
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(56px, 9.4vw, 148px);
+  line-height: 0.93;
+  letter-spacing: -0.038em;
+  margin-bottom: 14px;
+}
+.hero h1 .line-1 { display: block; }
+.hero h1 .line-2 {
+  display: block;
+  font-style: italic;
+  color: var(--accent);
+  padding-left: clamp(16px, 4vw, 64px);
+  font-weight: 400;
+  margin-top: -8px;
+}
+.hero-standfirst {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(18px, 1.65vw, 22px);
+  line-height: 1.48;
+  color: var(--ink-soft);
+  max-width: 530px;
+  margin: 36px 0 44px;
+  letter-spacing: -0.008em;
+}
+.hero-standfirst::before {
+  content: '';
+  display: block;
+  width: 36px; height: 1px;
+  background: var(--ink);
+  margin-bottom: 22px;
+}
+.hero-ctas { display: inline-flex; align-items: center; gap: 28px; flex-wrap: wrap; }
 
-/* ═══ FORGE ═══ */
-.forge{padding:7rem 0;background:var(--bg-w);overflow:hidden}
-.fg{display:grid;grid-template-columns:1fr 1.1fr;gap:3rem;align-items:center}
-.forge-t h2{font-size:clamp(1.8rem,3vw,2.3rem);margin-bottom:.7rem}
-.forge-d{color:var(--tx2);font-size:.9rem;line-height:1.75;margin-bottom:1rem;max-width:380px}
-.forge-c{padding:.7rem .9rem;background:var(--forest-bg);border-left:3px solid var(--forest);border-radius:0 5px 5px 0;font-size:.82rem;color:var(--forest);font-weight:500;line-height:1.4}
+.cta {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 15px;
+  padding: 13px 22px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 10px;
+  transition: all 0.25s var(--ease);
+  letter-spacing: -0.005em;
+}
+.cta:hover { background: var(--accent-deep); border-color: var(--accent-deep); transform: translateY(-1px); }
+.cta .arrow { transition: transform 0.25s var(--ease); }
+.cta:hover .arrow { transform: translateX(3px); }
 
-.fmk{background:var(--bg-c);border-radius:10px;border:1px solid var(--bdr);box-shadow:var(--sh);overflow:hidden}
-.fmk-h{display:flex;align-items:center;padding:.55rem .9rem;background:var(--bg-w);border-bottom:1px solid var(--bdr)}
-.fmk-tabs{display:flex;gap:.25rem}
-.fmk-tab{padding:.17rem .5rem;border-radius:3px;font-size:.57rem;font-weight:500;color:var(--txm);border:1px solid var(--bdr);background:var(--bg-c)}
-.fmk-tab.on{background:var(--forest-bg);color:var(--forest);border-color:var(--forest-br)}
-.fmk-b{padding:.9rem}
-.fmk-ol{font-size:.55rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--berry);margin-bottom:.35rem}
-.fmk-ot{font-family:var(--sf);font-size:.9rem;line-height:1.2;color:var(--tx);margin-bottom:.6rem}
-.fmk-sec{padding:.4rem .55rem;margin-bottom:.2rem;background:var(--berry-bg);border-radius:3px;border-left:3px solid var(--berry)}
-.fmk-st{font-size:.58rem;font-weight:600;color:var(--tx);line-height:1.2}
-.fmk-sd{font-size:.48rem;color:var(--txm);line-height:1.25;margin-top:.08rem}
-.fmk-sub{padding:.25rem .4rem .25rem 1rem;font-size:.52rem;color:var(--tx2);line-height:1.2;margin-bottom:.08rem}
-.fmk-btn{display:flex;align-items:center;justify-content:center;gap:.25rem;padding:.4rem;background:var(--berry);color:white;border-radius:3px;font-size:.58rem;font-weight:600;margin-top:.4rem}
-.fmk-in{padding:.4rem .55rem;border-top:1px solid var(--bdr);font-size:.55rem;color:var(--txm);margin-top:.4rem}
-.fmk-ih{font-size:.45rem;color:var(--txm);opacity:.5;margin-top:.1rem}.fmk-ih strong{color:var(--tx2)}
+.cta-text {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 14.5px;
+  color: var(--ink);
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.cta-text:hover { color: var(--accent); }
 
-/* ═══ TRANSLATION ═══ */
-.trans{padding:7rem 0}
-.tg{display:grid;grid-template-columns:1.1fr 1fr;gap:3.5rem;align-items:center}
-.trans-t h2{font-size:clamp(1.8rem,3vw,2.3rem);margin-bottom:.7rem}
-.trans-d{color:var(--tx2);font-size:.9rem;line-height:1.75;margin-bottom:1rem}
-.tfs{display:flex;flex-direction:column;gap:.45rem}
-.tfi{display:flex;align-items:center;gap:.55rem;font-size:.82rem;color:var(--tx)}
-.tfi-c{width:20px;height:20px;border-radius:4px;flex-shrink:0;background:var(--forest-bg);display:flex;align-items:center;justify-content:center}
-.tfi-c svg{width:10px;height:10px;stroke:var(--forest);fill:none;stroke-width:2;stroke-linecap:round}
-.tmk{background:var(--bg-c);border-radius:10px;border:1px solid var(--bdr);box-shadow:var(--sh);overflow:hidden}
-.tmk-h{display:flex;align-items:center;gap:.7rem;padding:.55rem .9rem;background:var(--bg-w);border-bottom:1px solid var(--bdr)}
-.tmk-l{font-size:.62rem;font-weight:600;padding:.17rem .45rem;border-radius:3px}
-.tmk-l.s{background:var(--forest-bg);color:var(--forest)}.tmk-l.t{background:var(--plum-bg);color:var(--plum)}
-.tmk-a{color:var(--txm);font-size:.65rem}
-.tmk-bd{display:grid;grid-template-columns:1fr 1fr}
-.tmk-p{padding:.8rem}.tmk-p:first-child{border-right:1px solid var(--bdr)}
-.tln{height:4px;border-radius:2px;margin-bottom:.28rem;background:rgba(30,46,36,.04)}
-.tln.w9{width:90%}.tln.w7{width:75%}.tln.w8{width:85%}.tln.w6{width:60%}.tln.w95{width:95%}
-.tln.gg{background:rgba(46,110,74,.06)}.tln.pp{background:rgba(110,90,130,.06)}
-.tmk-f{display:flex;align-items:center;justify-content:space-between;padding:.4rem .9rem;border-top:1px solid var(--bdr);background:var(--bg-w)}
-.tmk-f span{font-size:.55rem;color:var(--txm)}.tmk-f .badge{font-size:.55rem;color:var(--forest);font-weight:500}
+/* Hero right side — the monumental spine glyph */
+.hero-glyph {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.hero-glyph svg {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+}
+.hero-glyph .glyph-frame {
+  position: absolute;
+  inset: -12px;
+  border-top: 1px solid var(--rule-soft);
+  border-bottom: 1px solid var(--rule-soft);
+  pointer-events: none;
+}
+.hero-glyph .glyph-meta {
+  position: absolute;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+.hero-glyph .gm-1 { top: -24px; left: 0; }
+.hero-glyph .gm-2 { bottom: -24px; right: 0; }
 
-/* ═══ CITATIONS ═══ */
-.cite{padding:3.5rem 0;text-align:center}
-.cite h2{font-size:clamp(1.3rem,2vw,1.7rem);color:var(--tx2);margin-bottom:1.5rem}.cite h2 em{color:var(--forest)}
-.ct-tags{display:flex;flex-wrap:wrap;gap:.45rem;justify-content:center}
-.ct{padding:.32rem .8rem;background:var(--bg-c);border:1px solid var(--bdr);border-radius:14px;font-size:.72rem;font-weight:500;color:var(--tx2);transition:all .3s var(--e)}
-.ct:hover,.ct.on{border-color:var(--forest);color:var(--forest);background:var(--forest-bg)}
+/* ============================================================
+   § I — THE GAP
+   ============================================================ */
+.gap-section { background: var(--paper); }
+.gap-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(40px, 6vw, 96px);
+  align-items: start;
+}
+.gap-display {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(46px, 6.8vw, 96px);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  margin-bottom: 36px;
+}
+.gap-display .l { display: block; }
+.gap-display .l1 { color: var(--ink); }
+.gap-display .l2 { color: var(--ink); }
+.gap-display .l3 { color: var(--ink); padding-left: clamp(14px, 4vw, 60px); }
+.gap-display .slip {
+  font-style: italic;
+  color: var(--carmine);
+  font-weight: 400;
+  padding-left: clamp(28px, 7vw, 110px);
+  display: block;
+  margin-top: 6px;
+}
+.gap-body {
+  max-width: 460px;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+.gap-body p { margin-bottom: 16px; }
+.gap-body p strong { color: var(--ink); font-weight: 500; }
 
-/* ═══ AUDIENCE ═══ */
-.aud{padding:5.5rem 0;background:var(--bg-d);color:white}
-.audi{text-align:center}
-.aud .tag{color:var(--forest-l)}.aud .tag::before{background:var(--forest-l)}
-.aud h2{color:white;font-size:clamp(1.8rem,3vw,2.3rem);margin-bottom:2.5rem}.aud h2 em{color:var(--forest-l)}
-.aug{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;text-align:left}
-.ac{padding:1.5rem 1.2rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:7px;transition:all .4s var(--e)}
-.ac:hover{background:rgba(255,255,255,.06);border-color:rgba(46,110,74,.22);transform:translateY(-2px)}
-.aci{width:26px;height:26px;border-radius:5px;margin-bottom:.6rem;background:rgba(46,110,74,.08);display:flex;align-items:center;justify-content:center}
-.aci svg{width:12px;height:12px;stroke:var(--forest-l);fill:none;stroke-width:1.8;stroke-linecap:round}
-.ac h3{font-family:var(--sf);font-size:.95rem;margin-bottom:.3rem}.ac p{font-size:.72rem;color:rgba(255,255,255,.35);line-height:1.5}
+/* Fragments column — set like a footnotes apparatus */
+.fragments {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  padding-top: 6px;
+}
+.fragments-h {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.frag-row {
+  display: grid;
+  grid-template-columns: 78px 1fr;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--rule-soft);
+  align-items: baseline;
+}
+.frag-kind {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-top: 2px;
+}
+.frag-row .frag-kind.lost { color: var(--carmine); }
+.frag-row .frag-kind.idea { color: var(--accent); }
+.frag-row .frag-kind.pdf  { color: var(--discussion); }
+.frag-row .frag-kind.ref  { color: var(--writing); }
+.frag-row .frag-kind.note { color: var(--bronze); }
+.frag-row .frag-kind.method { color: var(--outline); }
+.frag-text { font-family: var(--serif); font-size: 15.5px; line-height: 1.45; }
+.frag-row.lost .frag-text { font-style: italic; color: var(--muted); }
+.frag-row.lost .frag-text::after { content: '  ?'; color: var(--carmine); font-weight: 500; font-style: normal; }
 
-/* ═══ INTEGRATIONS ═══ */
-.intb{padding:2rem 0;border-top:1px solid var(--bdr)}
-.inti{display:flex;align-items:center;justify-content:center;gap:2rem;flex-wrap:wrap}
-.intm{display:flex;align-items:center;gap:.35rem;font-size:.72rem;color:var(--txm);font-weight:500}
-.intc{width:24px;height:24px;border-radius:5px;background:var(--bg-w);border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:600;color:var(--tx2)}
+/* ============================================================
+   § II — THE METHOD (modules as movements)
+   ============================================================ */
+.method-section { background: var(--paper); }
+.method-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 6vw, 96px);
+  margin-bottom: clamp(48px, 7vw, 96px);
+  align-items: end;
+}
+.method-display {
+  font-family: var(--serif);
+  font-size: clamp(38px, 5.2vw, 72px);
+  line-height: 1.02;
+  letter-spacing: -0.028em;
+}
+.method-display em { color: var(--accent); font-style: italic; }
+.method-lead {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  max-width: 460px;
+}
 
-/* ═══ PRICING ═══ */
-.prc{padding:5rem 0;text-align:center}
-.prc .tag{justify-content:center}
-.prc h2{font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:.5rem}
-.prc-sub{color:var(--tx2);font-size:.82rem;font-weight:300;margin-bottom:2.5rem}
-.prc-g{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:100%;margin:0 auto}
-.prc-c{background:var(--bg-c);border:1px solid var(--bdr);border-radius:10px;padding:2rem 1.8rem;text-align:left;position:relative;transition:all .3s var(--e)}
-.prc-c:hover{border-color:var(--bdr-h);box-shadow:var(--sh)}
-.prc-c.pop{border-color:var(--forest);box-shadow:var(--sh-g)}
-.prc-badge{position:absolute;top:-10px;right:16px;background:var(--forest);color:white;font-size:.58rem;font-weight:600;padding:.2rem .65rem;border-radius:4px;letter-spacing:.06em;text-transform:uppercase}
-.prc-tier{font-family:var(--sf);font-size:1.1rem;margin-bottom:.15rem}
-.prc-price{font-family:var(--sf);font-size:2.2rem;font-weight:500;letter-spacing:-.02em;margin-bottom:.1rem}
-.prc-price span{font-size:.8rem;font-weight:400;color:var(--tx2)}
-.prc-desc{font-size:.72rem;color:var(--tx2);margin-bottom:1.2rem;font-weight:300}
-.prc-ul{list-style:none;margin-bottom:1.5rem}
-.prc-ul li{font-size:.72rem;color:var(--tx2);padding:.3rem 0;padding-left:1.2rem;position:relative}
-.prc-ul li::before{content:'✓';position:absolute;left:0;color:var(--forest);font-weight:600;font-size:.68rem}
-.prc-cta{display:inline-flex;align-items:center;padding:.6rem 1.4rem;font-size:.76rem;font-weight:600;border-radius:6px;transition:all .3s var(--e);text-decoration:none;width:100%;justify-content:center}
-.prc-cta.primary{background:var(--forest);color:white}.prc-cta.primary:hover{background:var(--forest-l);transform:translateY(-1px)}
-.prc-cta.secondary{background:transparent;color:var(--tx);border:1.5px solid var(--bdr)}.prc-cta.secondary:hover{border-color:var(--forest);color:var(--forest)}
-.prc-inst{margin-top:1.5rem;padding:1.2rem 1.6rem;background:var(--bg-w);border:1px solid var(--bdr);border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:1.2rem;flex-wrap:wrap}
-.prc-inst-l{display:flex;align-items:center;gap:.7rem;color:var(--tx2);font-size:.78rem;font-weight:300;flex:1;min-width:280px}
-.prc-inst-l svg{color:var(--txm);flex-shrink:0}
-.prc-inst-cta{font-family:var(--sf);font-size:.82rem;font-weight:500;color:var(--forest);text-decoration:none;white-space:nowrap;transition:color .2s var(--e)}
-.prc-inst-cta:hover{color:var(--forest-l)}
-@media(max-width:900px){.prc-g{grid-template-columns:1fr}.prc-inst{flex-direction:column;align-items:flex-start;gap:.8rem}}
+.movements {
+  border-top: 1px solid var(--ink);
+}
+.movement {
+  display: grid;
+  grid-template-columns: 56px 1.05fr 1.4fr 80px;
+  gap: clamp(20px, 3vw, 48px);
+  padding: 28px 0 32px;
+  border-bottom: 1px solid var(--rule-soft);
+  align-items: start;
+  position: relative;
+  transition: background 0.3s var(--ease);
+}
+.movement:hover { background: rgba(255,255,255,0.4); }
+.mov-num {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--accent);
+  line-height: 1;
+  padding-top: 4px;
+}
+.mov-id {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.mov-name {
+  font-family: var(--serif);
+  font-size: clamp(26px, 2.5vw, 34px);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+.mov-desc {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--muted);
+  margin-top: 6px;
+  line-height: 1.45;
+  max-width: 320px;
+}
+.mov-body {
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  max-width: 460px;
+  padding-top: 6px;
+}
+.mov-icon {
+  display: flex; align-items: flex-start; justify-content: flex-end;
+  padding-top: 4px;
+}
+.mov-icon svg { width: 56px; height: 56px; opacity: 0.95; }
 
-/* ═══ CTA ═══ */
-.cta{padding:6rem 0;text-align:center;position:relative}
-.cta::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:400px;height:400px;background:radial-gradient(ellipse,rgba(46,110,74,.04),transparent 70%);pointer-events:none}
-.ctai{max-width:500px;margin:0 auto;position:relative}
-.cta h2{font-size:clamp(1.8rem,3.2vw,2.4rem);margin-bottom:.6rem}.cta h2 em{color:var(--forest)}
-.cta p{color:var(--tx2);font-size:.9rem;margin-bottom:1.5rem;font-weight:300}
-.cta-b{display:flex;gap:.7rem;justify-content:center}
+/* ============================================================
+   § III — CRYSTALLISATIONS
+   ============================================================ */
+.crystals-section {
+  background: var(--vellum);
+  position: relative;
+}
+.crystals-section::before, .crystals-section::after {
+  content: ''; position: absolute; left: 0; right: 0;
+  height: 1px; background: var(--rule-soft);
+}
+.crystals-section::before { top: 0; }
+.crystals-section::after  { bottom: 0; }
 
-/* ═══ FOOTER ═══ */
-footer{padding:1.6rem 2.5rem;border-top:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
-.fl{font-family:var(--sf);font-size:.9rem;color:var(--txm)}.fl span{color:var(--forest);opacity:.5}
-.fk{display:flex;gap:1.2rem}.fk a{font-size:.68rem;color:var(--txm)}.fk a:hover{color:var(--forest)}
-.fc{font-size:.6rem;color:var(--txm);opacity:.4}
+.crystals-display {
+  font-family: var(--serif);
+  font-size: clamp(48px, 7vw, 108px);
+  line-height: 0.96;
+  letter-spacing: -0.035em;
+  margin-bottom: 36px;
+  max-width: 11ch;
+}
+.crystals-display em {
+  color: var(--bronze);
+  font-style: italic;
+  display: block;
+}
 
-@keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-@keyframes hl{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-@keyframes sp{0%,100%{opacity:.3}50%{opacity:.8}}
+.crystals-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 6vw, 96px);
+  align-items: start;
+}
+.crystals-prose {
+  font-family: var(--serif);
+  font-size: 17.5px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  max-width: 480px;
+  margin-bottom: 36px;
+}
+.crystals-prose p { margin-bottom: 16px; }
 
-@media(max-width:1024px){.mf{grid-template-columns:repeat(3,1fr);gap:1.2rem 0}.mf::before{display:none}.crys-g,.fg,.tg{grid-template-columns:1fr;gap:2.5rem}.aug{grid-template-columns:1fr 1fr}.sp{overflow-x:auto}}
-@media(max-width:768px){.nk{display:none}.nb{display:block}.hero{padding:5.5rem 1.5rem 2.5rem}.hero-cta{flex-direction:column;align-items:center}.frag{font-size:.58rem;padding:.35rem .6rem}.ls{display:none}.mf{grid-template-columns:1fr 1fr}.aug{grid-template-columns:1fr}.cta-b{flex-direction:column;align-items:center}footer{flex-direction:column;gap:.8rem;text-align:center}}
+/* Taxonomy diagram */
+.taxonomy {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 18px;
+  padding: 24px 0;
+}
+.taxonomy::before {
+  content: '◆';
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 28px;
+  color: var(--bronze);
+}
+.taxonomy::after {
+  content: ''; position: absolute;
+  left: 50%; top: 10%; bottom: 10%;
+  width: 1px; background: var(--rule-soft);
+  transform: translateX(-0.5px);
+}
+.tax-cell {
+  padding: 10px 18px;
+  text-align: center;
+}
+.tax-cell:nth-child(1) { text-align: right; padding-right: 36px; border-bottom: 1px solid var(--rule-soft); }
+.tax-cell:nth-child(2) { text-align: left;  padding-left: 36px;  border-bottom: 1px solid var(--rule-soft); }
+.tax-cell:nth-child(3) { text-align: right; padding-right: 36px; }
+.tax-cell:nth-child(4) { text-align: left;  padding-left: 36px; }
+.tax-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.tax-name {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 24px;
+  line-height: 1.1;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.tax-cell:nth-child(1) .tax-label { color: var(--writing); }
+.tax-cell:nth-child(2) .tax-label { color: var(--discussion); }
+.tax-cell:nth-child(3) .tax-label { color: var(--reading); }
+.tax-cell:nth-child(4) .tax-label { color: var(--carmine); }
+
+/* Crystal "catalog card" */
+.catalog {
+  background: var(--surface);
+  border: 1px solid var(--rule-soft);
+  padding: 26px 28px 24px;
+  position: relative;
+  margin-top: 40px;
+  max-width: 520px;
+}
+.catalog::before {
+  content: '◆';
+  position: absolute;
+  top: -10px; left: 24px;
+  background: var(--vellum);
+  padding: 0 8px;
+  color: var(--bronze);
+  font-size: 14px;
+}
+.catalog-meta {
+  display: flex; justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.catalog-meta .accession { color: var(--bronze); }
+.catalog-title {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: -0.018em;
+  line-height: 1.15;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.catalog-body {
+  font-family: var(--serif);
+  font-size: 15.5px;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+}
+.catalog-footer {
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-top: 1px dashed var(--rule);
+  padding-top: 14px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.catalog-dest { color: var(--accent); }
+.catalog-dest::after { content: ' →'; }
+
+/* ============================================================
+   § IV — POSITION (anti-positioning)
+   ============================================================ */
+.position-section {
+  background: var(--ink);
+  color: var(--paper);
+}
+.position-section .sect-label { color: rgba(240,244,241,0.55); }
+.position-section .sect-label .sect-num { color: var(--paper); }
+.position-section .sect-label .sect-rule { background: rgba(240,244,241,0.18); }
+.position-section .tick { background: rgba(111,184,157,0.7); }
+.position-section .tick::before { background: #6FB89D; }
+
+.pull-quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(48px, 7.5vw, 124px);
+  line-height: 0.96;
+  letter-spacing: -0.035em;
+  color: var(--paper);
+  position: relative;
+  padding-left: clamp(40px, 8vw, 100px);
+  margin-bottom: clamp(36px, 5vw, 64px);
+  max-width: 11ch;
+}
+.pull-quote::before {
+  content: '\201C';
+  position: absolute;
+  left: 0; top: -0.2em;
+  font-size: 1.3em;
+  font-style: italic;
+  color: #6FB89D;
+  line-height: 1;
+  font-weight: 400;
+}
+.pull-quote .not {
+  display: block;
+  color: rgba(240,244,241,0.5);
+  font-size: 0.55em;
+  font-style: italic;
+  margin-top: 12px;
+  letter-spacing: -0.02em;
+}
+
+.position-body {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.55;
+  color: rgba(240,244,241,0.78);
+  max-width: 620px;
+  margin-bottom: clamp(50px, 7vw, 90px);
+  padding-left: clamp(40px, 8vw, 100px);
+}
+
+.opp {
+  display: grid;
+  grid-template-columns: 1fr 32px 1fr;
+  gap: clamp(20px, 3vw, 40px);
+  align-items: start;
+  border-top: 1px solid rgba(240,244,241,0.18);
+  padding-top: 36px;
+}
+.opp-col-h {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(240,244,241,0.5);
+  margin-bottom: 22px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(240,244,241,0.12);
+}
+.opp .us-h { color: #6FB89D; }
+.opp ul { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+.opp li {
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.55;
+  letter-spacing: -0.005em;
+}
+.opp .them li { color: rgba(240,244,241,0.55); font-style: italic; }
+.opp .them li::before {
+  content: '— ';
+  color: rgba(240,244,241,0.35);
+}
+.opp .us li { color: var(--paper); }
+.opp .us li::before {
+  content: '+ ';
+  color: #6FB89D;
+  font-family: var(--mono);
+  font-size: 14px;
+  margin-right: 2px;
+}
+.opp-rule {
+  border-left: 1px solid rgba(240,244,241,0.12);
+  height: 100%;
+  width: 0;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   § V — ACCESS (pricing as a table)
+   ============================================================ */
+.access-section { background: var(--paper); }
+.access-intro {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(40px, 6vw, 90px);
+  margin-bottom: clamp(50px, 7vw, 90px);
+  align-items: end;
+}
+.access-display {
+  font-family: var(--serif);
+  font-size: clamp(40px, 5.4vw, 76px);
+  line-height: 1;
+  letter-spacing: -0.028em;
+}
+.access-display em { color: var(--accent); font-style: italic; }
+.access-lead {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+.access-lead strong { font-style: normal; color: var(--ink); font-weight: 500; }
+
+/* The pricing table */
+.tariff {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr 1fr 1fr;
+  border-top: 2px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+.tariff-row {
+  display: contents;
+}
+.tariff-cell {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--rule-soft);
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+.tariff-cell.label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-right: 16px;
+}
+.tariff-row.featured .tariff-cell { background: rgba(26,107,90,0.04); }
+.tariff-row.featured .tariff-cell:not(.label) { color: var(--ink); }
+
+.tariff-head {
+  border-bottom: 1px solid var(--ink);
+}
+.tariff-head .tariff-cell {
+  padding-top: 14px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--ink);
+}
+.tariff-head .tariff-cell.label {
+  text-transform: uppercase;
+  color: var(--ink);
+  letter-spacing: 0.18em;
+  font-size: 10.5px;
+}
+.tariff-name {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.tariff-tagline {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  text-transform: none;
+}
+.tariff-row.featured .tariff-head .tariff-cell { background: var(--ink); color: var(--paper); }
+.tariff-row.featured .tariff-head .tariff-name { color: var(--paper); }
+.tariff-row.featured .tariff-head .tariff-tagline { color: rgba(240,244,241,0.7); }
+
+.tariff-price {
+  display: flex; align-items: baseline; gap: 4px;
+  font-family: var(--serif);
+}
+.tariff-price .amount {
+  font-size: 44px;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  font-style: italic;
+}
+.tariff-price .per {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  text-transform: lowercase;
+}
+.tariff-credits {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+
+.tariff-cta {
+  padding: 28px 22px 32px;
+}
+.tariff-cta a {
+  display: inline-flex;
+  align-items: center; gap: 8px;
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 2px;
+  transition: color 0.2s var(--ease);
+}
+.tariff-cta a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.tariff-cta a::after { content: '→'; transition: transform 0.2s var(--ease); }
+.tariff-cta a:hover::after { transform: translateX(3px); }
+
+.access-note {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 28px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================================
+   COLOPHON (closing)
+   ============================================================ */
+.colophon {
+  position: relative;
+  padding: clamp(120px, 16vw, 220px) var(--rail) clamp(80px, 10vw, 140px);
+  text-align: center;
+}
+.colophon-glyph {
+  margin: 0 auto 56px;
+  width: 60px; height: 60px;
+}
+.colophon-display {
+  font-family: var(--serif);
+  font-size: clamp(56px, 9vw, 132px);
+  line-height: 0.95;
+  letter-spacing: -0.038em;
+  margin-bottom: 18px;
+}
+.colophon-display .l1 { display: block; color: var(--ink); }
+.colophon-display .l2 {
+  display: block;
+  font-style: italic;
+  color: var(--accent);
+  font-weight: 400;
+}
+.colophon-sub {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--muted);
+  margin: 28px auto 36px;
+  max-width: 540px;
+}
+.colophon-ctas { display: inline-flex; gap: 24px; align-items: center; }
+
+/* ============================================================
+   COLOPHON-FOOTER
+   ============================================================ */
+.footer-colophon {
+  border-top: 1px solid var(--rule-soft);
+  margin-top: 40px;
+  padding: 36px 0 28px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.fc-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+  gap: 30px;
+  align-items: start;
+  margin-bottom: 30px;
+}
+.fc-brand .wordmark {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-transform: none;
+  letter-spacing: -0.02em;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+.fc-brand p {
+  font-family: var(--serif);
+  font-size: 13.5px;
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--muted);
+  line-height: 1.55;
+  max-width: 280px;
+}
+.fc-col h6 {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+.fc-col ul { list-style: none; }
+.fc-col a {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ink-soft);
+  display: block;
+  padding: 4px 0;
+  transition: color 0.2s var(--ease);
+}
+.fc-col a:hover { color: var(--accent); }
+
+.fc-bottom {
+  border-top: 1px solid var(--rule-soft);
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.fc-issn {
+  display: inline-flex; gap: 24px;
+}
+
+/* ============================================================
+   ANIMATIONS — only reveal-on-scroll, no entry animation (preview-safe)
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   DEMO REEL — full-width video block under hero
+   ============================================================ */
+.demo-section {
+  position: relative;
+  padding-left: var(--rail);
+  padding-top: clamp(40px, 6vw, 80px);
+  padding-bottom: clamp(60px, 8vw, 110px);
+  border-top: 1px solid var(--rule-soft);
+  margin-top: clamp(40px, 6vw, 80px);
+}
+.demo-eyebrow {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: clamp(24px, 3vw, 36px);
+}
+.demo-eyebrow .accession { color: var(--bronze); }
+.demo-eyebrow .demo-rule { flex: 1; height: 1px; background: var(--rule); opacity: 0.6; max-width: 160px; }
+.demo-display {
+  font-family: var(--serif);
+  font-size: clamp(32px, 4.2vw, 56px);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  margin-bottom: clamp(28px, 3.5vw, 44px);
+  max-width: 18ch;
+}
+.demo-display em { color: var(--bronze); font-style: italic; }
+.demo-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--ink);
+  border: 1px solid var(--rule);
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(20, 32, 28, 0.08);
+}
+.demo-frame video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.demo-frame::after {
+  content: '';
+  position: absolute; inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(20, 32, 28, 0.04);
+}
+.demo-corner {
+  position: absolute;
+  top: 12px; left: 14px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(240, 244, 241, 0.82);
+  background: rgba(20, 32, 28, 0.55);
+  padding: 5px 9px;
+  border-radius: 2px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.demo-sound {
+  position: absolute;
+  bottom: 14px; right: 14px;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(240, 244, 241, 0.92);
+  background: rgba(20, 32, 28, 0.55);
+  padding: 7px 11px 7px 9px;
+  border: 0;
+  border-radius: 2px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background 0.18s var(--ease);
+}
+.demo-sound:hover { background: rgba(20, 32, 28, 0.78); }
+.demo-sound .sound-icon {
+  display: inline-block;
+  width: 14px; height: 14px;
+  position: relative;
+}
+.demo-sound .sound-icon::before,
+.demo-sound .sound-icon::after {
+  content: '';
+  position: absolute;
+  background: currentColor;
+}
+.demo-sound .sound-icon::before {
+  left: 0; top: 4px;
+  width: 4px; height: 6px;
+  border-radius: 1px;
+}
+.demo-sound .sound-icon::after {
+  left: 4px; top: 1px;
+  width: 0; height: 0;
+  background: transparent;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 6px solid currentColor;
+}
+/* waves when unmuted */
+.demo-sound[data-muted="false"] .sound-icon {
+  width: 18px;
+}
+.demo-sound[data-muted="false"] .sound-icon .wave {
+  position: absolute;
+  right: 0; top: 50%;
+  width: 2px; height: 2px;
+  border: 1.5px solid currentColor;
+  border-left: 0;
+  border-radius: 0 4px 4px 0;
+  transform: translateY(-50%);
+}
+/* slash when muted */
+.demo-sound[data-muted="true"] .sound-icon .slash {
+  position: absolute;
+  left: 10px; top: 50%;
+  width: 10px; height: 1.5px;
+  background: currentColor;
+  transform: translateY(-50%) rotate(-30deg);
+  transform-origin: center;
+}
+.demo-caption {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--rule-soft);
+}
+.demo-caption .cap-text {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14.5px;
+  color: var(--muted);
+  max-width: 60ch;
+  line-height: 1.5;
+}
+.demo-caption .cap-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1100px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-glyph { display: none; }
+  .gap-grid, .crystals-grid, .access-intro, .method-intro {
+    grid-template-columns: 1fr;
+  }
+  .movement {
+    grid-template-columns: 40px 1fr;
+    grid-template-areas:
+      "num name"
+      ".   desc"
+      ".   body"
+      ".   icon";
+    row-gap: 8px;
+  }
+  .mov-num { grid-area: num; }
+  .mov-name-wrap { grid-area: name; }
+  .mov-desc { grid-area: desc; }
+  .mov-body { grid-area: body; }
+  .mov-icon { grid-area: icon; justify-content: flex-start; }
+  .tariff { grid-template-columns: 1fr; }
+  .tariff-cell.label { background: var(--paper-warm); }
+  .opp { grid-template-columns: 1fr; gap: 40px; }
+  .opp-rule { display: none; }
+  .fc-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 720px) {
+  :root { --rail: 24px; }
+  .masthead { grid-template-columns: 1fr auto; }
+  .mast-center { display: none; }
+  .folio { grid-template-columns: 1fr 1fr; gap: 6px 14px; }
+  .folio span:nth-child(3) { display: none; }
+  .nav-links { display: none; }
+  .hero h1 { font-size: 52px; }
+  .gap-display { font-size: 46px; }
+  .pull-quote { font-size: 52px; padding-left: 28px; }
+  .crystals-display { font-size: 52px; }
+  .colophon-display { font-size: 56px; }
+  .fc-grid { grid-template-columns: 1fr; }
+  .fc-bottom { flex-direction: column; gap: 12px; }
+  .taxonomy { grid-template-columns: 1fr; }
+  .taxonomy::after { left: 10%; right: 10%; top: 50%; height: 1px; width: auto; bottom: auto; background: var(--rule-soft); }
+  .tax-cell { text-align: left !important; padding: 12px 0 !important; border-bottom: 1px solid var(--rule-soft); }
+}
 </style>
 </head>
 <body>
 
-<nav>
-  <a href="#" class="nl">Tes<span>yra</span></a>
-  <div class="nk"><a href="#method">The Method</a><a href="#crystallisations">Insights</a><a href="#forge">The Discussion</a><a href="#pricing">Pricing</a><a href="https://app.tesyra.com" class="btn bg">Sign In</a><a href="https://app.tesyra.com" class="btn bf">Sign Up</a></div>
-  <div class="nb"><span></span><span></span><span></span></div>
-</nav>
+<div class="page" id="top">
+  <aside class="spine" aria-hidden="true"></aside>
 
-<!-- ═══ HERO ═══ -->
-<section class="hero" id="top">
+  <!-- ============== MASTHEAD ============== -->
+  <header class="masthead">
+    <div class="mast-mark">
+      <a href="#top" class="wordmark">tesyra</a>
+    </div>
+    <div class="mast-center mono-caps" data-key="mast.tagline">A platform for academic research</div>
+    <div class="mast-right">
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button data-lang="es">ES</button>
+        <button data-lang="en" class="on">EN</button>
+      </div>
+      <a href="https://app.tesyra.com" class="signin" data-key="mast.signin">Sign in</a>
+    </div>
+  </header>
 
-  <!-- Scattered fragments — visual chaos -->
-  <div class="chaos-field">
-    <div class="cf note vis" style="top:6%;left:1%;transform:rotate(-3deg)">Kerrigan (2019) — annotated: "contested legitimacy of informal tenure"</div>
-    <div class="cf lost mid" style="top:13%;left:12%;transform:rotate(1.5deg)">Where was that quote about recursive governance?</div>
-    <div class="cf ref dim" style="top:22%;left:3%;transform:rotate(-1deg)">Thornvald & Ruíz-Peña (2021), p. 134</div>
-    <div class="cf idea vis" style="top:30%;left:8%;transform:rotate(2deg)">Link watershed governance to Mehta's framework?</div>
-    <div class="cf pdf mid" style="top:40%;left:1%;transform:rotate(-2.5deg)">pastoral_mobility_ANNOTATED_v2.pdf</div>
-    <div class="cf lost dim" style="top:50%;left:10%;transform:rotate(1deg)">Lost: that fieldwork observation about fences</div>
-    <div class="cf note mid" style="top:58%;left:2%;transform:rotate(-1.8deg)">Zotero tag: "epistemological rupture"</div>
-    <div class="cf ref vis" style="top:67%;left:7%;transform:rotate(3deg)">Boamah & Amoako (2020) — re-read methodology</div>
-    <div class="cf lost dim" style="top:76%;left:1%;transform:rotate(-0.5deg)">Had an insight connecting chapters 3 and 5... gone</div>
-    <div class="cf idea mid" style="top:84%;left:14%;transform:rotate(2.2deg)">Possible gap: temporal dimension of dispossession</div>
-    <div class="cf pdf dim" style="top:92%;left:4%;transform:rotate(-3deg)">thesis_ch4_draft_v6_FINAL_REVISED.pdf</div>
-    <div class="cf ref vis" style="top:4%;right:5%;transform:rotate(2deg)">Dávalos-Fernández (2018) — challenge assumption in §2.3</div>
-    <div class="cf lost mid" style="top:11%;right:1%;transform:rotate(-1.5deg)">That argument about embodied knowledge... WHICH paper?</div>
-    <div class="cf note dim" style="top:19%;right:10%;transform:rotate(0.8deg)">Highlighted: "formalization paradox erases communal memory"</div>
-    <div class="cf pdf vis" style="top:27%;right:2%;transform:rotate(-2deg)">comparative_tenure_analysis_INCOMPLETE.pdf</div>
-    <div class="cf idea mid" style="top:36%;right:8%;transform:rotate(1.5deg)">Counter-argument: what if adaptation reinforces exclusion?</div>
-    <div class="cf lost vis" style="top:44%;right:1%;transform:rotate(-1deg)">Monday's reading session — 4 hours — no notes survived</div>
-    <div class="cf ref dim" style="top:53%;right:12%;transform:rotate(2.8deg)">Okonkwo & Nzegwu (2022), check Figure 7</div>
-    <div class="cf note mid" style="top:62%;right:3%;transform:rotate(-2.2deg)">Margin note: "contradicts my own data — rethink?"</div>
-    <div class="cf lost dim" style="top:70%;right:7%;transform:rotate(1.2deg)">Forgot why I downloaded these 12 articles</div>
-    <div class="cf pdf mid" style="top:79%;right:1%;transform:rotate(-1.8deg)">lit_review_sources_UNSORTED_batch3.pdf</div>
-    <div class="cf idea dim" style="top:87%;right:9%;transform:rotate(2.5deg)">Reframe using relational ontology? Ask supervisor</div>
-    <div class="cf lost vis" style="top:95%;right:3%;transform:rotate(-0.5deg)">Deadline: 11 days. Still no outline.</div>
+  <div class="folio">
+    <span data-key="folio.l">Tesyra Press</span>
+    <span data-key="folio.c1"><em>Vol. I</em> · Issue 01</span>
+    <span data-key="folio.c2">Published from Santiago</span>
+    <span data-key="folio.r">May MMXXVI</span>
   </div>
 
-  <!-- Hero text -->
-  <div class="hero-center">
-    <h1><span class="line">You read. You annotate.</span><span class="line">You think.</span><span class="line">And then it all <em>slips away.</em></span></h1>
-    <p class="hero-sub">Hundreds of sources, scattered notes, brilliant insights trapped in PDFs and forgotten Zotero folders. The gap between reading and writing is where your best ideas go to die.</p>
-    <div class="hero-cta"><a href="#resolution" class="btn bf">There is a better way</a><a href="#method" class="btn bg">See the method</a></div>
-  </div>
+  <!-- ============== HERO — MONUMENT ============== -->
+  <section class="hero" aria-labelledby="hero-headline">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow">
+          <span class="dot" aria-hidden="true"></span>
+          <span data-key="hero.eyebrow">A research platform for the long form</span>
+        </div>
+        <h1 id="hero-headline">
+          <span class="line-1" data-key="hero.l1">Be happy thinking.</span>
+          <span class="line-2" data-key="hero.l2">Everything is there.</span>
+        </h1>
+        <p class="hero-standfirst" data-key="hero.standfirst">Tesyra walks with you from reading sources to writing the article — through five modules and a single, structured thought.</p>
+        <div class="hero-ctas">
+          <a href="#access" class="cta" data-key="hero.cta1">Start free <span class="arrow">→</span></a>
+          <a href="#gap" class="cta-text" data-key="hero.cta2">Read the prospectus</a>
+        </div>
+      </div>
 
-  <!-- Timeline of Loss -->
-  <div class="tl-section">
-    <div class="timeline">
-      <div class="tl-track">
-        <div class="tl-card lost"><div class="tl-type">Lost insight</div><div class="tl-title">The connection between chapters 2 and 4</div><div class="tl-desc">You saw it clearly while reading at midnight. By morning, the thread was gone.</div><div class="tl-when">Tuesday, 11:47 PM</div><div class="tl-stamp">Lost</div></div>
-        <div class="tl-card forgot"><div class="tl-type">Forgotten source</div><div class="tl-title">"Governance is always a spatial practice"</div><div class="tl-desc">You highlighted it. You starred it. But which article? Which page? Which folder?</div><div class="tl-when">Somewhere last month</div><div class="tl-stamp">Lost</div></div>
-        <div class="tl-card buried"><div class="tl-type">Buried in PDFs</div><div class="tl-title">The annotation that would reframe your argument</div><div class="tl-desc">It's in one of 200+ PDFs in your Zotero library. Good luck.</div><div class="tl-when">Unknown</div><div class="tl-stamp">Lost</div></div>
-        <div class="tl-card scattered"><div class="tl-type">Scattered notes</div><div class="tl-title">Three weeks of reading. No outline.</div><div class="tl-desc">Notes in Zotero. Ideas in a notebook. Highlights in PDFs. Fragments in Google Docs. Nothing connects.</div><div class="tl-when">Every single project</div><div class="tl-stamp">Lost</div></div>
-        <div class="tl-card lost"><div class="tl-type">Lost insight</div><div class="tl-title">The 2am revelation</div><div class="tl-desc">You saw the entire argument. Crystal clear. You told yourself you'd remember. You didn't.</div><div class="tl-when">Last Thursday, 2:14 AM</div><div class="tl-stamp">Lost</div></div>
-        <div class="tl-card forgot"><div class="tl-type">Forgotten context</div><div class="tl-title">Why did I highlight this paragraph?</div><div class="tl-desc">47 passages across 12 articles. Weeks later, you can't remember why any of them mattered.</div><div class="tl-when">Ongoing</div><div class="tl-stamp">Lost</div></div>
-        <div class="tl-card buried"><div class="tl-type">Buried connection</div><div class="tl-title">The gap nobody has identified yet</div><div class="tl-desc">You spotted it across two sources. A theoretical gap that could be your contribution. But the connection exists only in your memory.</div><div class="tl-when">3 months ago</div><div class="tl-stamp">Lost</div></div>
-        <div class="tl-card scattered"><div class="tl-type">Disconnected ideas</div><div class="tl-title">Deadline in 11 days. Still no structure.</div><div class="tl-desc">You have the knowledge. You have the reading. What you don't have is a way to turn fragments into an argument.</div><div class="tl-when">Right now</div><div class="tl-stamp">Lost</div></div>
-        <!-- Duplicate for infinite scroll -->
-        <div class="tl-card lost"><div class="tl-type">Lost insight</div><div class="tl-title">The connection between chapters 2 and 4</div><div class="tl-desc">You saw it clearly while reading at midnight. By morning, the thread was gone.</div><div class="tl-when">Tuesday, 11:47 PM</div><div class="tl-stamp">Lost</div></div>
-        <div class="tl-card forgot"><div class="tl-type">Forgotten source</div><div class="tl-title">"Governance is always a spatial practice"</div><div class="tl-desc">You highlighted it. You starred it. But which article? Which page? Which folder?</div><div class="tl-when">Somewhere last month</div><div class="tl-stamp">Lost</div></div>
-        <div class="tl-card buried"><div class="tl-type">Buried in PDFs</div><div class="tl-title">The annotation that would reframe your argument</div><div class="tl-desc">It's in one of 200+ PDFs in your Zotero library. Good luck.</div><div class="tl-when">Unknown</div><div class="tl-stamp">Lost</div></div>
-        <div class="tl-card scattered"><div class="tl-type">Scattered notes</div><div class="tl-title">Three weeks of reading. No outline.</div><div class="tl-desc">Notes in Zotero. Ideas in a notebook. Highlights in PDFs. Fragments in Google Docs. Nothing connects.</div><div class="tl-when">Every single project</div><div class="tl-stamp">Lost</div></div>
-        <div class="tl-card lost"><div class="tl-type">Lost insight</div><div class="tl-title">The 2am revelation</div><div class="tl-desc">You saw the entire argument. Crystal clear. You told yourself you'd remember. You didn't.</div><div class="tl-when">Last Thursday, 2:14 AM</div><div class="tl-stamp">Lost</div></div>
-        <div class="tl-card forgot"><div class="tl-type">Forgotten context</div><div class="tl-title">Why did I highlight this paragraph?</div><div class="tl-desc">47 passages across 12 articles. Weeks later, you can't remember why any of them mattered.</div><div class="tl-when">Ongoing</div><div class="tl-stamp">Lost</div></div>
-        <div class="tl-card buried"><div class="tl-type">Buried connection</div><div class="tl-title">The gap nobody has identified yet</div><div class="tl-desc">You spotted it across two sources. A theoretical gap that could be your contribution. But the connection exists only in your memory.</div><div class="tl-when">3 months ago</div><div class="tl-stamp">Lost</div></div>
-        <div class="tl-card scattered"><div class="tl-type">Disconnected ideas</div><div class="tl-title">Deadline in 11 days. Still no structure.</div><div class="tl-desc">You have the knowledge. You have the reading. What you don't have is a way to turn fragments into an argument.</div><div class="tl-when">Right now</div><div class="tl-stamp">Lost</div></div>
+      <div class="hero-glyph">
+        <div class="glyph-frame" aria-hidden="true"></div>
+        <span class="glyph-meta gm-1" data-key="hero.gm1">Plate 01 — The Spine</span>
+        <span class="glyph-meta gm-2" data-key="hero.gm2">After the outline</span>
+        <svg viewBox="0 0 96 96" aria-hidden="true">
+          <g fill="none" stroke="#1A6B5A" stroke-width="2.2" stroke-linecap="round">
+            <line x1="22" y1="20" x2="22" y2="76"></line>
+            <line x1="22" y1="28" x2="74" y2="28"></line>
+            <line x1="22" y1="44" x2="62" y2="44"></line>
+            <line x1="22" y1="60" x2="50" y2="60"></line>
+            <line x1="22" y1="76" x2="74" y2="76"></line>
+          </g>
+        </svg>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Closing question -->
-  <div class="closing-q"><p>How many of <em>your</em> best ideas are trapped in a PDF you'll never open again?</p></div>
-  <div class="scroll-cue"><div class="sl"></div><span>Scroll</span></div>
-</section>
+  <!-- ============== DEMO REEL ============== -->
+  <section class="sect demo-section reveal" id="demo" data-screen-label="00 Demo">
+    <span class="tick" aria-hidden="true"></span>
+    <div class="demo-eyebrow">
+      <span class="accession" data-key="demo.acc">Plate 00 · In motion</span>
+      <span class="demo-rule"></span>
+      <span data-key="demo.runtime">00:42 · silent loop</span>
+    </div>
+    <h2 class="demo-display">
+      <span data-key="demo.l1">The platform,</span>
+      <em data-key="demo.l2">in forty-two seconds.</em>
+    </h2>
+    <div class="demo-frame">
+      <span class="demo-corner" data-key="demo.corner">Tesyra · Reel 01</span>
+      <video
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Tesyra product demo">
+        <source src="assets/tesyra-demo.mp4" type="video/mp4">
+        <source src="assets/tesyra-demo.mov" type="video/quicktime">
+      </video>
+      <button class="demo-sound" data-muted="true" type="button" aria-label="Toggle sound">
+        <span class="sound-icon" aria-hidden="true"><span class="slash"></span><span class="wave"></span></span>
+        <span class="sound-label" data-key="demo.sound.off">Sound off</span>
+      </button>
+    </div>
+    <div class="demo-caption">
+      <span class="cap-text" data-key="demo.cap">From reading sources to writing the article — the five movements, threaded through one structured thought.</span>
+      <span class="cap-meta" data-key="demo.meta">Recorded May MMXXVI</span>
+    </div>
+  </section>
 
-<!-- ═══ RESOLUTION ═══ -->
-<section class="resolution" id="resolution">
-  <div class="rv"><h2>Tesyra brings <em>order.</em></h2><p class="res-sub">Every insight finds its place. Every argument takes shape.</p></div>
-  <div class="lf rv">
-    <div class="lfr">
-      <div class="lt"><div class="td"></div><div class="td"></div><div class="td"></div><span class="tl2">tesyra.com</span></div>
-      <div class="lb">
-        <div class="ls"><div class="ls-t">Tesyra</div><div class="li"><div class="lic"></div> Dashboard</div><div class="li"><div class="lic"></div> The Reading</div><div class="li"><div class="lic"></div> The Discussion</div><div class="li ac"><div class="lic"></div> The Outline</div><div class="li"><div class="lic"></div> The Writing</div></div>
-        <div class="lm">
-          <div class="ltb"><div class="ltb-b on">Spine</div><div class="ltb-b">Free</div><div class="ltb-b">Reorganise</div><div class="ltb-b">Section</div><div class="ltb-b">Argument</div><div class="ltb-b">Citation</div><div class="ltb-b g">Ask Tesyra</div><div class="ltb-b p">Translate</div><div class="ltb-b a">Crystallisations</div></div>
-          <div class="sp">
-            <div class="ss"><div class="sh2"><div class="sn2">1</div><div class="st2">Introduction: The Paradox of Light</div><div class="sd2">Frames the central paradox of illumination as progress</div></div><div class="sb2"><div class="su">1.1 Illumination as Ideology</div><div class="su">1.2 Research Question</div><div class="su cr">Insight: Critical inversion</div><div class="sm2"><span>Suggest sources</span><span>Write in Writing</span></div></div></div>
-            <div class="ss"><div class="sh2"><div class="sn2">2</div><div class="st2">Theoretical Framework: Commons &amp; Property</div><div class="sd2">Develops the tripartite theoretical lens</div></div><div class="sb2"><div class="su">2.1 Night Sky as Commons</div><div class="su">2.2 Negative Property Rights</div><div class="su cr">Insight: Ostrom's limits</div><div class="su">2.3 Legal Geography</div><div class="sm2"><span>Suggest sources</span><span>Write in Writing</span></div></div></div>
-            <div class="ss"><div class="sh2"><div class="sn2">3</div><div class="st2">Normative Cartography: Regulation</div><div class="sd2">Maps the regulatory landscape at multiple levels</div></div><div class="sb2"><div class="su">3.1 Starlight Declaration</div><div class="su">3.2 National Models</div><div class="su cr">Insight: Soft-law dominance</div><div class="su">3.3 Structural Gaps</div><div class="sm2"><span>Suggest sources</span><span>Write in Writing</span></div></div></div>
-            <div class="ss"><div class="sh2"><div class="sn2">4</div><div class="st2">Tensions: Justice &amp; Ecology</div><div class="sd2">Examines material and political conflicts</div></div><div class="sb2"><div class="su">4.1 Tourism vs. Integrity</div><div class="su">4.2 Environmental Justice</div><div class="su cr">Insight: Absent biodiversity</div><div class="sm2"><span>Suggest sources</span><span>Write in Writing</span></div></div></div>
+  <!-- ============== § I — THE GAP ============== -->
+  <section class="sect gap-section reveal" id="gap" data-screen-label="01 The Gap">
+    <span class="tick" aria-hidden="true"></span>
+    <div class="sect-label">
+      <span class="sect-num">§ I</span>
+      <span data-key="g.label">The Gap</span>
+      <span class="sect-rule"></span>
+    </div>
+
+    <div class="gap-grid">
+      <div>
+        <h2 class="gap-display">
+          <span class="l l1" data-key="g.l1">You read.</span>
+          <span class="l l2" data-key="g.l2">You annotate. You think.</span>
+          <span class="l l3" data-key="g.l3">And then it all</span>
+          <span class="slip" data-key="g.l4">slips away.</span>
+        </h2>
+        <div class="gap-body">
+          <p data-key="g.p1">Hundreds of sources. Scattered notes. Brilliant insights trapped inside PDFs and forgotten folders. <strong>The gap between reading and writing is where your best ideas are lost.</strong></p>
+          <p data-key="g.p2">When you sit down to write, you start by reconstructing what you already knew last Tuesday — instead of building on it.</p>
+        </div>
+      </div>
+
+      <div class="fragments">
+        <div class="fragments-h" data-key="g.frag.h">— A typical afternoon, in fragments</div>
+        <div class="frag-row"><span class="frag-kind note">Highlight</span><span class="frag-text">"the threshold becomes infrastructure when crossed routinely"</span></div>
+        <div class="frag-row"><span class="frag-kind ref">Reference</span><span class="frag-text">Marrenkamp (2019) — needs re-reading</span></div>
+        <div class="frag-row"><span class="frag-kind pdf">PDF</span><span class="frag-text">ambient_infrastructures_draft.pdf</span></div>
+        <div class="frag-row lost"><span class="frag-kind lost">Lost</span><span class="frag-text">that argument about liminal publics</span></div>
+        <div class="frag-row"><span class="frag-kind idea">Idea</span><span class="frag-text">Connect the ambient turn to Verlanden?</span></div>
+        <div class="frag-row"><span class="frag-kind ref">Zotero</span><span class="frag-text">threshold theory — open questions</span></div>
+        <div class="frag-row"><span class="frag-kind note">Margin</span><span class="frag-text">IELSA 2024 report, p. 47</span></div>
+        <div class="frag-row lost"><span class="frag-kind lost">Where</span><span class="frag-text">that Halbersohn quote from Tuesday</span></div>
+        <div class="frag-row"><span class="frag-kind method">Method</span><span class="frag-text">Q methodology for ambient subjectivity</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== § II — THE METHOD ============== -->
+  <section class="sect method-section reveal" id="method" data-screen-label="02 The Method">
+    <span class="tick" aria-hidden="true"></span>
+    <div class="sect-label">
+      <span class="sect-num">§ II</span>
+      <span data-key="m.label">The Method</span>
+      <span class="sect-rule"></span>
+    </div>
+
+    <div class="method-intro">
+      <h2 class="method-display" data-key="m.display">Five movements. <em>One thought.</em></h2>
+      <p class="method-lead" data-key="m.lead">Each module is shaped to its moment — and each opens into the next. Insights from your reading feed your dialogue; what you decide in dialogue assembles your outline; the outline becomes the writing.</p>
+    </div>
+
+    <div class="movements">
+      <article class="movement">
+        <div class="mov-num">i.</div>
+        <div class="mov-name-wrap">
+          <div class="mov-id" data-key="m.r.id">The Reading</div>
+          <div class="mov-name" data-key="m.r.name">Sources, read closely.</div>
+          <div class="mov-desc" data-key="m.r.desc">— analyse, annotate, interrogate</div>
+        </div>
+        <div class="mov-body" data-key="m.r.body">Upload papers and pull out thesis, structure, key moves. Talk to one document or to many at once. Import from Zotero. Every passage you mark becomes a candidate for the next stage.</div>
+        <div class="mov-icon">
+          <svg viewBox="0 0 64 64"><g fill="none" stroke="#2D6A4F" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="18" y="12" width="32" height="40" rx="1.5"></rect><line x1="10" y1="32" x2="44" y2="32"></line><circle cx="44" cy="32" r="2.25" fill="#2D6A4F" stroke="none"></circle></g></svg>
+        </div>
+      </article>
+
+      <article class="movement">
+        <div class="mov-num">ii.</div>
+        <div class="mov-name-wrap">
+          <div class="mov-id" data-key="m.d.id">The Discussion</div>
+          <div class="mov-name" data-key="m.d.name">Dialogue, not autocomplete.</div>
+          <div class="mov-desc" data-key="m.d.desc">— challenge, follow-up, structure</div>
+        </div>
+        <div class="mov-body" data-key="m.d.body">A guided conversation that challenges your assumptions, asks follow-up questions, and produces a structured outline — not a transcript.</div>
+        <div class="mov-icon">
+          <svg viewBox="0 0 64 64"><g fill="none" stroke="#2B4C7E" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="18" x2="30" y2="32"></line><line x1="8" y1="46" x2="30" y2="32"></line><line x1="30" y1="32" x2="56" y2="32"></line><circle cx="30" cy="32" r="2.75" fill="#2B4C7E" stroke="none"></circle></g></svg>
+        </div>
+      </article>
+
+      <article class="movement">
+        <div class="mov-num">iii.</div>
+        <div class="mov-name-wrap">
+          <div class="mov-id" data-key="m.o.id">The Outline</div>
+          <div class="mov-name" data-key="m.o.name">The spine of your article.</div>
+          <div class="mov-desc" data-key="m.o.desc">— sections, gaps, evidence</div>
+        </div>
+        <div class="mov-body" data-key="m.o.body">Insights find their subsection. Missing sources are flagged. The argumentative architecture takes shape without you assembling it by hand.</div>
+        <div class="mov-icon">
+          <svg viewBox="0 0 64 64"><g fill="none" stroke="#B85C38" stroke-width="1.75" stroke-linecap="round"><line x1="14" y1="14" x2="14" y2="52"></line><line x1="14" y1="20" x2="50" y2="20"></line><line x1="14" y1="32" x2="42" y2="32"></line><line x1="14" y1="44" x2="34" y2="44"></line><line x1="14" y1="52" x2="50" y2="52"></line></g></svg>
+        </div>
+      </article>
+
+      <article class="movement">
+        <div class="mov-num">iv.</div>
+        <div class="mov-name-wrap">
+          <div class="mov-id" data-key="m.l.id">The Literature Review</div>
+          <div class="mov-name" data-key="m.l.name">References as a network.</div>
+          <div class="mov-desc" data-key="m.l.desc">— citation, cluster, centrality</div>
+        </div>
+        <div class="mov-body" data-key="m.l.body">Your bibliography rendered as warp and weft — who cites whom, which sources cluster, which are central. Not a list. A field.</div>
+        <div class="mov-icon">
+          <svg viewBox="0 0 64 64"><g fill="none" stroke="#A67C37" stroke-width="1.75" stroke-linecap="round"><line x1="10" y1="20" x2="42" y2="20"></line><line x1="14" y1="28" x2="50" y2="28"></line><line x1="10" y1="36" x2="44" y2="36"></line><line x1="14" y1="44" x2="52" y2="44"></line><line x1="10" y1="52" x2="46" y2="52"></line><line x1="32" y1="12" x2="32" y2="58"></line></g></svg>
+        </div>
+      </article>
+
+      <article class="movement">
+        <div class="mov-num">v.</div>
+        <div class="mov-name-wrap">
+          <div class="mov-id" data-key="m.w.id">The Writing</div>
+          <div class="mov-name" data-key="m.w.name">The page, finally.</div>
+          <div class="mov-desc" data-key="m.w.desc">— compose, edit, cite</div>
+        </div>
+        <div class="mov-body" data-key="m.w.body">An editor per subsection, with your insights and sources beside you. Editorial review, translation, and citation handling — APA, Chicago, OSCOLA, and more.</div>
+        <div class="mov-icon">
+          <svg viewBox="0 0 64 64"><g fill="none" stroke="#7B2D8E" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="46" x2="40" y2="46"></line><line x1="40" y1="46" x2="52" y2="22"></line><circle cx="40" cy="46" r="2" fill="#7B2D8E" stroke="none"></circle></g></svg>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============== § III — CRYSTALLISATIONS ============== -->
+  <section class="sect crystals-section reveal" id="crystallisations" data-screen-label="03 Crystallisations">
+    <span class="tick" aria-hidden="true"></span>
+    <div class="sect-label">
+      <span class="sect-num">§ III</span>
+      <span data-key="c.label">Crystallisations</span>
+      <span class="sect-rule"></span>
+    </div>
+
+    <h2 class="crystals-display">
+      <span data-key="c.l1">Your ideas</span>
+      <em data-key="c.l2">deserve to survive.</em>
+    </h2>
+
+    <div class="crystals-grid">
+      <div>
+        <div class="crystals-prose">
+          <p data-key="c.p1">Every insight you have while reading or in dialogue — every theoretical tension, every methodological move, every gap — captured with one click, classified, and filed exactly where it belongs in your outline.</p>
+          <p data-key="c.p2">By the time you write, the argument has already been laid down. You're not assembling — you're composing.</p>
+        </div>
+
+        <div class="taxonomy" aria-label="Crystallisation taxonomy">
+          <div class="tax-cell">
+            <div class="tax-label" data-key="c.t1.l">Theoretical</div>
+            <div class="tax-name" data-key="c.t1.n">A tension, a frame.</div>
+          </div>
+          <div class="tax-cell">
+            <div class="tax-label" data-key="c.t2.l">Methodological</div>
+            <div class="tax-name" data-key="c.t2.n">A way of looking.</div>
+          </div>
+          <div class="tax-cell">
+            <div class="tax-label" data-key="c.t3.l">Empirical</div>
+            <div class="tax-name" data-key="c.t3.n">A finding, a fact.</div>
+          </div>
+          <div class="tax-cell">
+            <div class="tax-label" data-key="c.t4.l">Structural</div>
+            <div class="tax-name" data-key="c.t4.n">A shape, a gap.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="catalog">
+          <div class="catalog-meta">
+            <span class="accession" data-key="c.cat.acc">Acc. 0042 · Theoretical</span>
+            <span data-key="c.cat.date">Filed Tue 03:42 AM</span>
+          </div>
+          <h3 class="catalog-title" data-key="c.cat.title">Threshold ecologies and ambient commons</h3>
+          <p class="catalog-body" data-key="c.cat.body">"Conventional commons frameworks falter where boundaries are diffuse — ambient noise, light spill, micro-climates being paradigmatic cases."</p>
+          <div class="catalog-footer">
+            <span data-key="c.cat.src">Halbersohn · 2017 · p. 32</span>
+            <span class="catalog-dest" data-key="c.cat.dest">§2.1 Ambient thresholds as commons</span>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ═══ METHOD ═══ -->
-<section class="method" id="method">
-  <div class="w mi">
-    <div class="mhd"><div class="tag rv">A method, not just a tool</div><h2 class="rv">Four modules. One <em>structured</em> workflow.</h2><p class="mh-s rv">From the first reading to the publishable article.</p></div>
-    <div class="mf rv">
-      <div class="ms"><div class="ms-i"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="ms-n">The Reading</div><div class="ms-l c1">Analyse</div><div class="ms-d">AI source analysis. Zotero import. Chat with up to 10 documents.</div></div>
-      <div class="ms"><div class="ms-i"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div><div class="ms-n">The Discussion</div><div class="ms-l c2">Dialogue</div><div class="ms-d">Guided conversations that build your argument and generate outlines.</div></div>
-      <div class="ms"><div class="ms-i"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div><div class="ms-n">The Outline</div><div class="ms-l c3">Structure</div><div class="ms-d">Visual spine layout. Crystallisations auto-assigned. Your argument at a glance.</div></div>
-      <!-- Literature Review card hidden for launch — re-enable post-launch -->
-      <div class="ms"><div class="ms-i"><svg viewBox="0 0 24 24"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div><div class="ms-n">The Writing</div><div class="ms-l c5">Write</div><div class="ms-d">Academic writing with citations, translation, and AI editorial review.</div></div>
+  <!-- ============== § IV — POSITION ============== -->
+  <section class="sect position-section reveal" id="position" data-screen-label="04 Position">
+    <span class="tick" aria-hidden="true"></span>
+    <div class="sect-label">
+      <span class="sect-num">§ IV</span>
+      <span data-key="p.label">Position</span>
+      <span class="sect-rule"></span>
     </div>
-  </div>
-</section>
 
-<!-- ═══ CRYSTALLISATIONS ═══ -->
-<section class="crys" id="crystallisations">
-  <div class="w crys-g">
-    <div class="crys-t"><div class="tag rv">Core Concept</div><h2 class="rv">Your ideas deserve<br>to <em>survive.</em></h2><p class="crys-d rv">Every insight while reading — every theoretical tension, every gap, every unexpected connection — captured, classified, and placed exactly where it belongs.</p>
-      <div class="cflo rv">
-        <div class="cfs"><div class="cfn">1</div><div class="cft"><strong>Read</strong> — analyse or dialogue</div></div><div class="cfc"><div class="cfc-l"></div></div>
-        <div class="cfs"><div class="cfn">2</div><div class="cft"><strong>Identify</strong> — a finding worth preserving</div></div><div class="cfc"><div class="cfc-l"></div></div>
-        <div class="cfs"><div class="cfn">3</div><div class="cft"><strong>Crystallise</strong> — one click, classified</div></div><div class="cfc"><div class="cfc-l"></div></div>
-        <div class="cfs"><div class="cfn">4</div><div class="cft"><strong>Assign</strong> — AI places it in your Outline</div></div><div class="cfc"><div class="cfc-l"></div></div>
-        <div class="cfs"><div class="cfn">5</div><div class="cft"><strong>Write</strong> — insights at hand in The Writing</div></div>
+    <blockquote class="pull-quote">
+      <span data-key="p.q1">AI Discussion,</span>
+      <span class="not" data-key="p.q2">not AI writing.</span>
+    </blockquote>
+
+    <p class="position-body" data-key="p.body">This is not autocomplete for your thesis. The system challenges your assumptions, asks follow-up questions, and helps you think more clearly. You still write. The argument remains yours.</p>
+
+    <div class="opp">
+      <div class="them">
+        <div class="opp-col-h them-h" data-key="p.them.h">— Other tools</div>
+        <ul>
+          <li data-key="p.them.1">Generate paragraphs without telling you which sources back them.</li>
+          <li data-key="p.them.2">Erase the trace of your reasoning.</li>
+          <li data-key="p.them.3">Leave you with text you can't defend.</li>
+          <li data-key="p.them.4">Every conversation starts from zero.</li>
+        </ul>
+      </div>
+      <div class="opp-rule" aria-hidden="true"></div>
+      <div class="us">
+        <div class="opp-col-h us-h" data-key="p.us.h">+ Tesyra</div>
+        <ul>
+          <li data-key="p.us.1">Crystallises the idea. Files it where it belongs.</li>
+          <li data-key="p.us.2">Your argument takes shape as you build it — not after.</li>
+          <li data-key="p.us.3">By the time you sit down to write, the structure already exists.</li>
+          <li data-key="p.us.4">Every insight references its source and its subsection.</li>
+        </ul>
       </div>
     </div>
-    <div class="rv">
-      <div class="cmk">
-        <div class="cmk-h"><span class="dia">◆</span><span class="tit">Crystallised Insights</span></div>
-        <div class="cmk-b">
-          <div class="cmk-s">Search insights...</div>
-          <div class="cmk-c"><div class="cmk-badge be">empirical</div><div class="cmk-ct">Relational conception of space</div><div class="cmk-cx">Space as constituted by practices and human interrelations...</div><div class="cmk-ca">→ Send to Loom</div></div>
-          <div class="cmk-c"><div class="cmk-badge bt">theoretical</div><div class="cmk-ct">Commons theory and atmospheric resources</div><div class="cmk-cx">Classical commons frameworks struggle with resources lacking clear boundaries...</div><div class="cmk-ca">→ Send to Loom</div></div>
-          <div class="cmk-c"><div class="cmk-badge bm">methodological</div><div class="cmk-ct">Q methodology for subjective positions</div><div class="cmk-cx">Captures diversity of viewpoints on property relations...</div><div class="cmk-ca">→ Send to Loom</div></div>
-          <div class="cmk-c"><div class="cmk-badge bs">structural</div><div class="cmk-ct">Regulatory fragmentation across levels</div><div class="cmk-cx">Soft-law instruments dominate governance architecture...</div><div class="cmk-ca">→ Send to Loom</div></div>
-          <div class="cmk-tr">Argument Trajectory</div>
-          <div class="cmk-ti"><div class="cmk-td"></div> Relational space</div><div class="cmk-ti"><div class="cmk-td"></div> Commons theory</div><div class="cmk-ti"><div class="cmk-td"></div> Q methodology</div><div class="cmk-ti"><div class="cmk-td"></div> Regulatory gaps</div><div class="cmk-ti"><div class="cmk-td"></div> Critical inversion</div>
+  </section>
+
+  <!-- ============== § V — ACCESS ============== -->
+  <section class="sect access-section reveal" id="access" data-screen-label="05 Access">
+    <span class="tick" aria-hidden="true"></span>
+    <div class="sect-label">
+      <span class="sect-num">§ V</span>
+      <span data-key="a.label">Access</span>
+      <span class="sect-rule"></span>
+    </div>
+
+    <div class="access-intro">
+      <h2 class="access-display">
+        <span data-key="a.d1">Every plan,</span><br>
+        <em data-key="a.d2">every module.</em>
+      </h2>
+      <p class="access-lead">
+        <span data-key="a.lead.1">No feature gates. All the tools, from day one.</span>
+        <strong data-key="a.lead.2"> The best model on every tier.</strong>
+      </p>
+    </div>
+
+    <div class="tariff">
+      <!-- header row -->
+      <div class="tariff-row tariff-head">
+        <div class="tariff-cell label" data-key="a.h.col">Plan</div>
+        <div class="tariff-cell">
+          <div class="tariff-name" data-key="a.t1.name">Explorer</div>
+          <div class="tariff-tagline" data-key="a.t1.tag">— for the first article</div>
+        </div>
+        <div class="tariff-cell">
+          <div class="tariff-name" data-key="a.t2.name">Researcher</div>
+          <div class="tariff-tagline" data-key="a.t2.tag">— for parallel projects</div>
+        </div>
+        <div class="tariff-cell">
+          <div class="tariff-name" data-key="a.t3.name">Academic Pro</div>
+          <div class="tariff-tagline" data-key="a.t3.tag">— for theses & books</div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
 
-<!-- ═══ FORGE ═══ -->
-<section class="forge" id="forge">
-  <div class="w fg">
-    <div class="forge-t"><div class="tag rv">Methodological Differentiator</div><h2 class="rv">The Discussion builds<br>your <em>outline.</em></h2><p class="forge-d rv">Not open-ended chat. Guided intellectual dialogue that produces a structured, buildable outline for your article.</p><div class="forge-c rv">Discussion → Outline → Writing → Article.</div></div>
-    <div class="rv">
-      <div class="fmk">
-        <div class="fmk-h"><div class="fmk-tabs"><div class="fmk-tab on">New</div><div class="fmk-tab">Conversation 1</div><div class="fmk-tab">Conversation 2</div></div></div>
-        <div class="fmk-b">
-          <div class="fmk-ol">Article Outline</div>
-          <div class="fmk-ot">Dark Skies and the Governance of the Luminic Commons</div>
-          <div class="fmk-sec"><div class="fmk-st">1. Introduction: The Paradox of Light as Progress</div><div class="fmk-sd">Frames the central paradox of artificial illumination</div></div>
-          <div class="fmk-sub">1.1 Illumination as Ideology: A Brief Genealogy</div>
-          <div class="fmk-sub">1.2 Research Question and Positionality</div>
-          <div class="fmk-sec"><div class="fmk-st">2. Theoretical Framework: Commons, Property, and Space</div><div class="fmk-sd">Develops the tripartite theoretical lens</div></div>
-          <div class="fmk-sub">2.1 The Night Sky as Commons</div>
-          <div class="fmk-sub">2.2 Negative Property and Exclusion Rights</div>
-          <div class="fmk-sub">2.3 Legal Geography: The Night as Produced Space</div>
-          <div class="fmk-btn">Build in Outline →</div>
-          <div class="fmk-in">Share your idea, argument, or question...</div>
-          <div class="fmk-ih">Shift+Enter for new line. Type <strong>/outline</strong> to generate outline.</div>
-        </div>
+      <!-- price -->
+      <div class="tariff-row featured">
+        <div class="tariff-cell label" data-key="a.r.price">Tariff</div>
+        <div class="tariff-cell"><div class="tariff-price"><span class="amount">$0</span><span class="per" data-key="a.t1.per">forever</span></div></div>
+        <div class="tariff-cell"><div class="tariff-price"><span class="amount">$19</span><span class="per" data-key="a.t2.per">/ month</span></div></div>
+        <div class="tariff-cell"><div class="tariff-price"><span class="amount">$39</span><span class="per" data-key="a.t3.per">/ month</span></div></div>
+      </div>
+
+      <!-- credits -->
+      <div class="tariff-row">
+        <div class="tariff-cell label" data-key="a.r.credits">Credits / month</div>
+        <div class="tariff-cell"><span class="tariff-credits">200</span></div>
+        <div class="tariff-cell"><span class="tariff-credits">400</span></div>
+        <div class="tariff-cell"><span class="tariff-credits">1,200</span></div>
+      </div>
+
+      <!-- projects -->
+      <div class="tariff-row">
+        <div class="tariff-cell label" data-key="a.r.projects">Active projects</div>
+        <div class="tariff-cell">1</div>
+        <div class="tariff-cell">3</div>
+        <div class="tariff-cell">5</div>
+      </div>
+
+      <!-- documents -->
+      <div class="tariff-row">
+        <div class="tariff-cell label" data-key="a.r.docs">Documents per project</div>
+        <div class="tariff-cell">15</div>
+        <div class="tariff-cell">30</div>
+        <div class="tariff-cell">50</div>
+      </div>
+
+      <!-- conversations -->
+      <div class="tariff-row">
+        <div class="tariff-cell label" data-key="a.r.conv">Conversations per project</div>
+        <div class="tariff-cell">5</div>
+        <div class="tariff-cell">15</div>
+        <div class="tariff-cell">30</div>
+      </div>
+
+      <!-- outlines -->
+      <div class="tariff-row">
+        <div class="tariff-cell label" data-key="a.r.outlines">Outlines per project</div>
+        <div class="tariff-cell">1</div>
+        <div class="tariff-cell">3</div>
+        <div class="tariff-cell">5</div>
+      </div>
+
+      <!-- pre-assignment -->
+      <div class="tariff-row">
+        <div class="tariff-cell label" data-key="a.r.preassign">Intelligent pre-assignment</div>
+        <div class="tariff-cell"><span class="mono" style="color:var(--accent)" data-key="a.r.included">included</span></div>
+        <div class="tariff-cell"><span class="mono" style="color:var(--accent)" data-key="a.r.included2">included</span></div>
+        <div class="tariff-cell"><span class="mono" style="color:var(--accent)" data-key="a.r.included3">included</span></div>
+      </div>
+
+      <!-- gap detection -->
+      <div class="tariff-row">
+        <div class="tariff-cell label" data-key="a.r.gaps">Bibliographic gap detection</div>
+        <div class="tariff-cell">—</div>
+        <div class="tariff-cell"><span class="mono" style="color:var(--accent)" data-key="a.r.included4">included</span></div>
+        <div class="tariff-cell"><span class="mono" style="color:var(--accent)" data-key="a.r.included5">included</span></div>
+      </div>
+
+      <!-- daily briefing -->
+      <div class="tariff-row">
+        <div class="tariff-cell label" data-key="a.r.briefing">Daily briefing</div>
+        <div class="tariff-cell">—</div>
+        <div class="tariff-cell">—</div>
+        <div class="tariff-cell"><span class="mono" style="color:var(--accent)" data-key="a.r.included6">included</span></div>
+      </div>
+
+      <!-- storage -->
+      <div class="tariff-row">
+        <div class="tariff-cell label" data-key="a.r.storage">Storage</div>
+        <div class="tariff-cell">100 MB</div>
+        <div class="tariff-cell">300 MB</div>
+        <div class="tariff-cell">500 MB</div>
+      </div>
+
+      <!-- CTAs -->
+      <div class="tariff-row">
+        <div class="tariff-cell label" style="border-bottom:none"></div>
+        <div class="tariff-cell tariff-cta" style="border-bottom:none"><a href="https://app.tesyra.com" data-key="a.t1.cta">Start free</a></div>
+        <div class="tariff-cell tariff-cta" style="border-bottom:none"><a href="https://app.tesyra.com" data-key="a.t2.cta">Try 14 days</a></div>
+        <div class="tariff-cell tariff-cta" style="border-bottom:none"><a href="https://app.tesyra.com" data-key="a.t3.cta">Get started</a></div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ═══ TRANSLATION ═══ -->
-<section class="trans" id="translation">
-  <div class="w tg">
-    <div class="rv">
-      <div class="tmk">
-        <div class="tmk-h"><div class="tmk-l s">Español</div><span class="tmk-a">→</span><div class="tmk-l t">British English</div></div>
-        <div class="tmk-bd"><div class="tmk-p"><div class="tln w9"></div><div class="tln w7"></div><div class="tln w8 gg"></div><div class="tln w6"></div><div style="height:.35rem"></div><div class="tln w95"></div><div class="tln w7"></div><div class="tln w8 gg"></div><div class="tln w9"></div></div><div class="tmk-p"><div class="tln w8 pp"></div><div class="tln w9"></div><div class="tln w7 pp"></div><div class="tln w6"></div><div style="height:.35rem"></div><div class="tln w9 pp"></div><div class="tln w8"></div><div class="tln w7 pp"></div><div class="tln w95"></div></div></div>
-        <div class="tmk-f"><span>Hybrid translation + academic refinement</span><div class="badge">Academic register preserved</div></div>
+    <p class="access-note" data-key="a.note">Prices in USD. Cancel anytime. Billing handled by Paddle (our merchant of record).</p>
+  </section>
+
+  <!-- ============== COLOPHON ============== -->
+  <section class="colophon" id="end" data-screen-label="06 Colophon">
+    <div class="colophon-glyph">
+      <svg viewBox="0 0 96 96" aria-hidden="true">
+        <g fill="none" stroke="#1A6B5A" stroke-width="2.5" stroke-linecap="round">
+          <line x1="22" y1="20" x2="22" y2="76"></line>
+          <line x1="22" y1="28" x2="74" y2="28"></line>
+          <line x1="22" y1="44" x2="62" y2="44"></line>
+          <line x1="22" y1="60" x2="50" y2="60"></line>
+          <line x1="22" y1="76" x2="74" y2="76"></line>
+        </g>
+      </svg>
+    </div>
+    <h2 class="colophon-display">
+      <span class="l1" data-key="end.l1">Be happy thinking.</span>
+      <span class="l2" data-key="end.l2">Everything is there.</span>
+    </h2>
+    <p class="colophon-sub" data-key="end.sub">Starting is free. No card required.</p>
+    <div class="colophon-ctas">
+      <a href="https://app.tesyra.com" class="cta" data-key="end.cta1">Start free <span class="arrow">→</span></a>
+      <a href="#method" class="cta-text" data-key="end.cta2">Read the prospectus</a>
+    </div>
+  </section>
+
+  <!-- ============== FOOTER COLOPHON ============== -->
+  <footer class="footer-colophon">
+    <div class="fc-grid">
+      <div class="fc-brand">
+        <span class="wordmark">tesyra</span>
+        <p data-key="fc.about">A research platform for academic researchers. From reading sources to writing the article — structured thinking, assisted.</p>
       </div>
-    </div>
-    <div class="trans-t"><div class="tag rv">Academic Translation</div><h2 class="rv">Research in your language.<br>Publish in <em>any other.</em></h2><p class="trans-d rv">Write in your native language. The hybrid engine produces publication-ready prose preserving register, terminology, and conventions.</p>
-      <div class="tfs rv">
-        <div class="tfi"><div class="tfi-c"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div> High-fidelity base translation</div>
-        <div class="tfi"><div class="tfi-c"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div> Academic register refinement</div>
-        <div class="tfi"><div class="tfi-c"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div> Field-specific terminology preserved</div>
-        <div class="tfi"><div class="tfi-c"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div> AI editorial review with tracked changes</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Citations -->
-<section class="cite rv"><div class="w"><h2>All major <em>citation systems</em></h2><div class="ct-tags"><div class="ct on">OSCOLA</div><div class="ct">APA 7th</div><div class="ct">Harvard</div><div class="ct">Chicago</div><div class="ct">MLA</div><div class="ct">Vancouver</div><div class="ct">IEEE</div><div class="ct">Bluebook</div></div></div></section>
-
-<!-- Audience -->
-<section class="aud">
-  <div class="w audi">
-    <div class="tag rv">Built For</div><h2 class="rv">For researchers who <em>publish.</em></h2>
-    <div class="aug rv">
-      <div class="ac"><div class="aci"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><h3>Journal Authors</h3><p>Transform months of reading into publishable arguments.</p></div>
-      <div class="ac"><div class="aci"><svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 6 3 6 3s6-1 6-3v-5"/></svg></div><h3>Doctoral Candidates</h3><p>Structure your thesis across hundreds of sources.</p></div>
-      <div class="ac"><div class="aci"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3>Research Teams</h3><p>Systematise collaborative article production.</p></div>
-      <div class="ac"><div class="aci"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h3>Multilingual Scholars</h3><p>Research in one language, publish in another.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- Integrations -->
-<section class="intb"><div class="inti"><div class="intm"><div class="intc">Z</div> Zotero</div><div class="intm"><div class="intc">W</div> Word</div><div class="intm"><div class="intc">P</div> PDF</div><div class="intm"><div class="intc">L</div> LaTeX</div></div></section>
-
-<!-- Pricing -->
-<section class="prc" id="pricing">
-  <div class="w">
-    <div class="tag rv">Simple, transparent pricing</div>
-    <h2 class="rv">Every tier gets full access to <em>every module.</em></h2>
-    <p class="prc-sub rv">No feature gates. All the tools, from day one.</p>
-    <div class="prc-g rv">
-      <div class="prc-c">
-        <div class="prc-tier">Explorer</div>
-        <div class="prc-price">$0<span>/month</span></div>
-        <p class="prc-desc">Read, discuss, and outline your research.</p>
-        <ul class="prc-ul">
-          <li>250 credits per month</li>
-          <li>1 project, 1 outline</li>
-          <li>15 documents, 100 MB storage</li>
-          <li>Full access to Reading, Discussion, Outline, Writing & Source Network</li>
-          <li>Intelligent crystallisation pre-assignment with the best model</li>
-          <li>Zotero sync, Word/PDF/LaTeX export</li>
+      <div class="fc-col">
+        <h6 data-key="fc.product">Product</h6>
+        <ul>
+          <li><a href="#method" data-key="fc.method">The Method</a></li>
+          <li><a href="#crystallisations" data-key="fc.crystals">Crystallisations</a></li>
+          <li><a href="#access" data-key="fc.pricing">Access</a></li>
+          <li><a href="#position" data-key="fc.position">Position</a></li>
         </ul>
-        <a href="https://app.tesyra.com" class="prc-cta secondary">Start free</a>
       </div>
-      <div class="prc-c pop">
-        <div class="prc-badge">Most chosen</div>
-        <div class="prc-tier">Researcher</div>
-        <div class="prc-price">$19<span>/month</span></div>
-        <p class="prc-desc">For PhD students and active researchers.</p>
-        <ul class="prc-ul">
-          <li>Everything in Explorer, plus:</li>
-          <li>400 credits per month</li>
-          <li>3 projects, 3 outlines per project</li>
-          <li>30 documents per project, 300 MB storage</li>
-          <li>Weekly nightly research review on your most active outline</li>
-          <li>No usage caps on source suggestions or PDF analysis</li>
+      <div class="fc-col">
+        <h6 data-key="fc.resources">Resources</h6>
+        <ul>
+          <li><a href="mailto:hello@tesyra.com" data-key="fc.support">Support</a></li>
         </ul>
-        <a href="https://app.tesyra.com" class="prc-cta primary">Choose Researcher</a>
       </div>
-      <div class="prc-c">
-        <div class="prc-tier">Academic Pro</div>
-        <div class="prc-price">$39<span>/month</span></div>
-        <p class="prc-desc">For postdocs and full-time research.</p>
-        <ul class="prc-ul">
-          <li>Everything in Researcher, plus:</li>
-          <li>1,200 credits per month</li>
-          <li>5 projects, 5 outlines per project</li>
-          <li>50 documents per project, 500 MB storage</li>
-          <li>Daily nightly research review on your 3 most active outlines</li>
+      <div class="fc-col">
+        <h6 data-key="fc.company">Company</h6>
+        <ul>
+          <li><a href="mailto:hello@tesyra.com" data-key="fc.contact">Contact</a></li>
         </ul>
-        <a href="https://app.tesyra.com" class="prc-cta secondary">Choose Academic Pro</a>
+      </div>
+      <div class="fc-col">
+        <h6 data-key="fc.legal">Legal</h6>
+        <ul>
+          <li><a href="/legal/privacy" data-key="fc.privacy">Privacy</a></li>
+          <li><a href="/legal/terms" data-key="fc.terms">Terms</a></li>
+          <li><a href="/legal/dpa" data-key="fc.dpa">Data processing</a></li>
+        </ul>
       </div>
     </div>
-    <div class="prc-inst rv">
-      <div class="prc-inst-l">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        <span>Leading a research group, department, or institution? Talk to us about pricing for teams.</span>
+    <div class="fc-bottom">
+      <span>© MMXXVI · Tesyra</span>
+      <div class="fc-issn">
+        <span>ISSN-equiv. 2026-TSY-01</span>
+        <span data-key="fc.signoff">Made with care for researchers</span>
       </div>
-      <a href="mailto:hello@tesyra.com?subject=Tesyra%20for%20teams" class="prc-inst-cta">Talk to us →</a>
     </div>
-  </div>
-</section>
+  </footer>
 
-<!-- CTA -->
-<section class="cta" id="cta">
-  <div class="ctai"><h2 class="rv">Your ideas deserve better<br>than a <em>blank page.</em></h2><p class="rv">Stop losing insights. Start building arguments.</p><div class="cta-b rv"><a href="https://app.tesyra.com" class="btn bf">Sign Up — It's Free</a><a href="https://app.tesyra.com" class="btn bg">Sign In</a></div></div>
-</section>
+</div>
 
-<footer><div class="fl">Tes<span>yra</span></div><div class="fk"><a href="/legal/terms">Terms</a><a href="/legal/privacy">Privacy</a><a href="/legal/dpa">DPA</a><a href="mailto:hello@tesyra.com">Contact</a></div><div class="fc">© 2026 Tesyra</div></footer>
+<script src="dict.js"></script>
+<script src="main.js"></script>
 
-<script>
-// Scroll reveals
-const rvs=document.querySelectorAll('.rv');
-const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('v')})},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
-rvs.forEach(el=>obs.observe(el));
-</script>
 </body>
 </html>

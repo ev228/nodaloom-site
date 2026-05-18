@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="The Discussion">
+  <title>The Discussion</title>
+  <desc>Two voices converging at a point of synthesis and continuing as a single thread.</desc>
+  <g fill="none" stroke="#2B4C7E" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="8" y1="18" x2="30" y2="32"></line>
+    <line x1="8" y1="46" x2="30" y2="32"></line>
+    <line x1="30" y1="32" x2="56" y2="32"></line>
+    <circle cx="30" cy="32" r="2.75" fill="#2B4C7E" stroke="none"></circle>
+  </g>
+</svg>

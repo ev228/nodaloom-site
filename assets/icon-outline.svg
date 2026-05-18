@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="The Outline">
+  <title>The Outline</title>
+  <desc>Hierarchical structure of horizontal threads with progressive indentation, echoing the spine system.</desc>
+  <g fill="none" stroke="#B85C38" stroke-width="1.75" stroke-linecap="round">
+    <line x1="14" y1="14" x2="14" y2="52"></line>
+    <line x1="14" y1="20" x2="50" y2="20"></line>
+    <line x1="14" y1="32" x2="42" y2="32"></line>
+    <line x1="14" y1="44" x2="34" y2="44"></line>
+    <line x1="14" y1="52" x2="50" y2="52"></line>
+  </g>
+</svg>
